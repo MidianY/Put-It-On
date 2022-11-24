@@ -1,0 +1,6 @@
+.Page-header {
+    position: relative;
+    top:2px;
+    color: white;
+    font-size: calc(80px + 2vmin);
+  }
