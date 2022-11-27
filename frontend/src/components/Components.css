@@ -1,4 +1,16 @@
 .location-input {
     font-size: calc(8px + 1vmin);
-    
+}
+
+.clothing-item {
+    width: 100px;
+    height: 100px;
+}
+
+.person {
+    width: 600px;
+    height: 600px;
+    position: absolute;
+    left: -100px;
+    top: 100px;
 }

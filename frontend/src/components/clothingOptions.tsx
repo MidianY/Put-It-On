@@ -7,7 +7,6 @@ export default function ClothingOptions() {
     return(
         <Tabs>
         <Tab eventKey="shirts" title="Shirts">
-            Shirts
             <ClothingItem />
         </Tab>
         <Tab eventKey="pants" title="Pants">
