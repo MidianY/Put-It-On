@@ -5,6 +5,62 @@
 .clothing-item {
     width: 100px;
     height: 100px;
+    grid-area: overlap;
+    align-self: center;
+    justify-self: center;
+    cursor: grab;
+}
+
+.clothing-box {
+    width: 170px;
+    height: 170px;
+    grid-area: overlap;
+    color: white;
+    cursor: grab;
+}
+
+.clothing-container {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.clothing-options {
+    display: flex;
+    flex-direction: row;
+}
+
+.color-box {
+    grid-area: overlap;
+}
+
+.color-check {
+    grid-area: overlap;
+    align-self: center;
+    justify-self: center;
+}
+
+.color-box-container {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.color-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 34px);
+    position: absolute;
+    top: 180px;
+    right: 40px;
+}
+
+.clothing-with-colors {
+    position: relative;
+}
+
+.closet-clothing {
+    position: fixed;
+    left: 0;
+    bottom: 0;
 }
 
 .person {
@@ -13,4 +69,27 @@
     position: absolute;
     left: -100px;
     top: 100px;
+}
+
+.citySearchOptions {
+    overflow: hidden;
+    overflow-y: auto;
+    width: 183px;
+    background-color: white;
+    margin-top: 5px;
+    position: relative;
+    left: 95px;
+}
+
+.citySearchOptions .citySearchOption {
+    color: black;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    height: 50px;
+    cursor: grab;
+}
+
+.citySearchOption:hover {
+    background-color: lightgrey;
 }
