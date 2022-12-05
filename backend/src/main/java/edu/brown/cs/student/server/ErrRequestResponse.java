@@ -3,8 +3,7 @@ package edu.brown.cs.student.server;
 import com.squareup.moshi.Moshi;
 
 /**
- * Response object to return if the given data source wasn't accessible (e.g., the file didn't exist
- * or the Open Weather API returned an error for a given location).
+ * Response object to return if the API request was incorrectly formatted
  *
  * @param result - string indicating datasource error
  */
