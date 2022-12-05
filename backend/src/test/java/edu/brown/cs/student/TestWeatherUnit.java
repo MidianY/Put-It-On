@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
+/** Unit tests for handling of weather API */
 public class TestWeatherUnit {
 
   weather weatherAPI = new weather();

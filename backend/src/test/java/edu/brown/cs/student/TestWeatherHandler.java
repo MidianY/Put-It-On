@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import spark.Spark;
 
+/** Tests weather handler works as expected */
 public class TestWeatherHandler {
 
   @BeforeAll

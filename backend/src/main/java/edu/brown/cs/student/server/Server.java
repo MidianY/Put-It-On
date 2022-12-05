@@ -39,8 +39,7 @@ public class Server {
           response.header("Access-Control-Allow-Methods", "*");
         });
 
-    //put state variable shared among classes/methods here i.e closet
-
+    // put state variable shared among classes/methods here i.e closet
 
     // Setting up the handler for the GET endpoints
     Spark.get("getWeatherData", new WeatherHandler());
