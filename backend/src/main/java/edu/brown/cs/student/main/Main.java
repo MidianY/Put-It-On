@@ -2,7 +2,6 @@ package edu.brown.cs.student.main;
 
 import java.util.Arrays;
 
-
 /** The Main class of our project. This is where execution begins. */
 public final class Main {
   /**
@@ -23,5 +22,5 @@ public final class Main {
   private void run() {
     // prints out command line arguments; can remove this
     System.out.println(Arrays.toString(args));
-     }
+  }
 }
