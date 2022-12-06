@@ -9,4 +9,12 @@ public class ClothingItem {
         this.itemKind = itemKind;
     }
 
+    public String getName(){
+        return this.name;
+    }
+
+    public ItemKind getItemKind(){
+        return this.itemKind;
+    }
+
 }
