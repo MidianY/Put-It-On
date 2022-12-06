@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.brown.cs.student.weather.ErrDatasourceResponse;
 import edu.brown.cs.student.weather.WeatherAPIUtilities;
-import edu.brown.cs.student.weather.weather;
+import edu.brown.cs.student.weather.Weather;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 /** Unit tests for handling of weather API */
 public class TestWeatherUnit {
 
-  weather weatherAPI = new weather();
+  Weather weatherAPI = new Weather();
 
   /** Tests that valid query returns expected map with all relevant weather data components */
   @Test

@@ -14,7 +14,7 @@ import java.util.*;
  * weather class that handles implementing the open weather api to fetch different weather data i.e
  * temp, feels like temp, rain, snow, etc.
  */
-public class weather {
+public class Weather {
   OpenWeather openWeather = new OpenWeather();
   String API_KEY = openWeather.getKey();
 
@@ -97,7 +97,7 @@ public class weather {
 
   public static void main(String[] args)
       throws IOException, URISyntaxException, InterruptedException {
-    weather weatherObj = new weather();
+    Weather weatherObj = new Weather();
     System.out.println(weatherObj.getWeatherData("Los Angeles", "CA"));
   }
 }

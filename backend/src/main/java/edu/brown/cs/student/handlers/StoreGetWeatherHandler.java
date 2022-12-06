@@ -2,7 +2,7 @@ package edu.brown.cs.student.handlers;
 
 import edu.brown.cs.student.server.ErrRequestResponse;
 import edu.brown.cs.student.server.UserData;
-import edu.brown.cs.student.weather.weather;
+import edu.brown.cs.student.weather.Weather;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -20,7 +20,7 @@ public class StoreGetWeatherHandler implements Route {
     this.db = db;
   }
 
-  weather weatherAPI = new weather();
+  Weather weatherAPI = new Weather();
 
   /**
    * Method that handles get request and outputs a serialized response.
