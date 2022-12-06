@@ -2,7 +2,8 @@ package edu.brown.cs.student.server;
 
 import static spark.Spark.after;
 
-import edu.brown.cs.student.handlers.WeatherHandler;
+import edu.brown.cs.student.handlers.GetWeatherHandler;
+import edu.brown.cs.student.handlers.StoreGetWeatherHandler;
 import spark.Spark;
 
 /**
@@ -40,9 +41,11 @@ public class Server {
         });
 
     // put state variable shared among classes/methods here i.e closet
+    UserData userDB = new UserData();
 
     // Setting up the handler for the GET endpoints
-    Spark.get("getWeatherData", new WeatherHandler());
+    Spark.get("storeGetWeatherData", new StoreGetWeatherHandler(userDB));
+    Spark.get("getWeatherData", new GetWeatherHandler(userDB));
 
     Spark.init();
     Spark.awaitInitialization();

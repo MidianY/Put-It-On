@@ -4,7 +4,8 @@ import com.squareup.moshi.Moshi;
 
 /**
  * Response object to return if the given data source wasn't accessible (e.g., the file didn't exist
- * or the Open Weather API returned an error for a given location).
+ * or the Open Weather API returned an error for a given location or no city is currently stored
+ * (i.e it is null).
  *
  * @param result - string indicating datasource error
  */

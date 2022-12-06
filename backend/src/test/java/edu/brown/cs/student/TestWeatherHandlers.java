@@ -3,8 +3,9 @@ package edu.brown.cs.student;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.brown.cs.student.handlers.WeatherHandler;
-import edu.brown.cs.student.server.ErrRequestResponse;
+import edu.brown.cs.student.handlers.GetWeatherHandler;
+import edu.brown.cs.student.handlers.StoreGetWeatherHandler;
+import edu.brown.cs.student.server.UserData;
 import edu.brown.cs.student.weather.ErrDatasourceResponse;
 import edu.brown.cs.student.weather.WeatherAPIUtilities;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import spark.Spark;
 
 /** Tests weather handler works as expected */
-public class TestWeatherHandler {
+public class TestWeatherHandlers {
 
   @BeforeAll
   public static void spark_port_setup() {
@@ -34,8 +35,12 @@ public class TestWeatherHandler {
   public void setup() {
     // Re-initialize state, etc. for _every_ test method run
 
+    UserData userDB = new UserData();
+
     // In fact, restart the entire Spark server for every test!
-    Spark.get("/getWeatherData", new WeatherHandler());
+    Spark.get("/storeGetWeatherData", new StoreGetWeatherHandler(userDB));
+    Spark.get("/getWeatherData", new GetWeatherHandler(userDB));
+
     Spark.init();
     Spark.awaitInitialization(); // don't continue until the server is listening
   }
@@ -43,7 +48,9 @@ public class TestWeatherHandler {
   @AfterEach
   public void teardown() {
     // Gracefully stop Spark listening on endpoints
+    Spark.unmap("/storeGetWeatherData");
     Spark.unmap("/getWeatherData");
+
     Spark.awaitStop(); // don't proceed until the server is stopped
   }
 
@@ -51,7 +58,7 @@ public class TestWeatherHandler {
   @Test
   public void testValidWeather() throws IOException, URISyntaxException, InterruptedException {
     String URLString =
-        "http://localhost:" + Spark.port() + "/" + "getWeatherData?city=Portland&state=OR";
+        "http://localhost:" + Spark.port() + "/" + "storeGetWeatherData?city=Portland&state=OR";
 
     // create client
     HttpClient client = HttpClient.newHttpClient();
@@ -72,6 +79,20 @@ public class TestWeatherHandler {
     assertTrue(responseMap.containsKey("icon"));
     assertTrue(responseMap.containsKey("rain"));
     assertTrue(responseMap.containsKey("snow"));
+    assertTrue(responseMap.containsKey("city"));
+    assertTrue(responseMap.containsKey("state"));
+
+    // verify weather data was stored into user database
+    String URLString2 = "http://localhost:" + Spark.port() + "/" + "getWeatherData";
+
+    // create request
+    HttpRequest weatherRequest2 = HttpRequest.newBuilder().uri(new URI(URLString2)).GET().build();
+
+    // get response from endpoint
+    HttpResponse<String> weatherResponse2 =
+        client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
+    String resp2 = weatherResponse2.body();
+    assertEquals(resp, resp2);
   }
 
   /**
@@ -95,8 +116,24 @@ public class TestWeatherHandler {
     String resp = weatherResponse.body();
     String expectedJson = new ErrDatasourceResponse().serialize();
     assertEquals(expectedJson, resp);
+
+    // verify that user database isn't updated
+    String URLString2 = "http://localhost:" + Spark.port() + "/" + "getWeatherData";
+
+    // create request
+    HttpRequest weatherRequest2 = HttpRequest.newBuilder().uri(new URI(URLString2)).GET().build();
+
+    // get response from endpoint
+    HttpResponse<String> weatherResponse2 =
+        client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
+    String resp2 = weatherResponse2.body();
+    assertEquals(resp, resp2);
   }
 
+  /**
+   * Tests for when the request itself is invalid, verifying correct warning responses are returned
+   * accordingly
+   */
   @Test
   public void testInvalidQuery() throws URISyntaxException, IOException, InterruptedException {
     String URLString = "http://localhost:" + Spark.port() + "/" + "getWeatherData?city=";
@@ -111,7 +148,19 @@ public class TestWeatherHandler {
     HttpResponse<String> weatherResponse =
         client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
     String resp = weatherResponse.body();
-    String expectedJson = new ErrRequestResponse().serialize();
+    String expectedJson = new ErrDatasourceResponse().serialize();
     assertEquals(expectedJson, resp);
+
+    // verify that user database isn't updated
+    String URLString2 = "http://localhost:" + Spark.port() + "/" + "getWeatherData";
+
+    // create request
+    HttpRequest weatherRequest2 = HttpRequest.newBuilder().uri(new URI(URLString2)).GET().build();
+
+    // get response from endpoint
+    HttpResponse<String> weatherResponse2 =
+        client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
+    String resp2 = weatherResponse2.body();
+    assertEquals(resp, resp2);
   }
 }

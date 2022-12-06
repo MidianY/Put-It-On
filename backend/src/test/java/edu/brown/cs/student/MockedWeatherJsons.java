@@ -97,13 +97,10 @@ public class MockedWeatherJsons {
           + "}";
 
   public static String RainSnowResponse =
-      "{\"result\":\"success\",\"temp\":34.16,"
-          + "\"feelsLike\":27.46,\"descr\":\"light rain\",\"icon\":\"10n\",\"rain\":0.59,"
-          + "\"snow\":2.0}";
+      "{\"result\":\"success\",\"city\":\"Portland\",\"state\":\"OR\",\"temp\":34.16,\"feelsLike\":27.46,\"descr\":\"light rain\",\"icon\":\"10n\",\"rain\":0.59,\"snow\":2.0}";
 
   public static String noRainSnowResponse =
-      "{\"result\":\"success\",\"temp\":34.16,"
-          + "\"feelsLike\":27.46,\"descr\":\"light rain\",\"icon\":\"10n\",\"rain\":0.0,\"snow\":0.0}";
+      "{\"result\":\"success\",\"city\":\"Portland\",\"state\":\"OR\",\"temp\":34.16,\"feelsLike\":27.46,\"descr\":\"light rain\",\"icon\":\"10n\",\"rain\":0.0,\"snow\":0.0}";
 
   public static String InValidResponse = "invalid";
 }

@@ -51,7 +51,7 @@ public class weather {
     if (weatherResponse.statusCode() == 400 || weatherResponse.statusCode() == 404) {
       return new ErrDatasourceResponse().serialize();
     }
-    return getWeatherDataFromJson(weatherResponse.body());
+    return getWeatherDataFromJson(weatherResponse.body(), city, state);
   }
 
   /**
@@ -60,7 +60,7 @@ public class weather {
    * @param json - json that open weather api provides
    * @return serialized map with relevant weather data
    */
-  public String getWeatherDataFromJson(String json) throws IOException {
+  public String getWeatherDataFromJson(String json, String city, String state) throws IOException {
     try {
       Map<String, Object> responseMap = WeatherAPIUtilities.JsonToMap(json);
       Map<String, Double> mainMap = (Map<String, Double>) responseMap.get("main");
@@ -81,6 +81,8 @@ public class weather {
       }
 
       return new WeatherSuccessResponse(
+              city,
+              state,
               mainMap.get("temp"),
               mainMap.get("feels_like"),
               (String) weatherMap.get("description"),

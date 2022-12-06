@@ -1,12 +1,24 @@
 package edu.brown.cs.student.handlers;
 
 import edu.brown.cs.student.server.ErrRequestResponse;
+import edu.brown.cs.student.server.UserData;
 import edu.brown.cs.student.weather.weather;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
-public class WeatherHandler implements Route {
+/**
+ * Class that processes the storeGetWeatherData endpoint request. This class both stores the
+ * weather/city data into the database shared state variable and returns its contents to the
+ * endpoint caller
+ */
+public class StoreGetWeatherHandler implements Route {
+
+  private UserData db;
+
+  public StoreGetWeatherHandler(UserData db) {
+    this.db = db;
+  }
 
   weather weatherAPI = new weather();
 
@@ -27,7 +39,14 @@ public class WeatherHandler implements Route {
         return new ErrRequestResponse().serialize();
       }
 
-      return weatherAPI.getWeatherData(city, state);
+      String resp = weatherAPI.getWeatherData(city, state);
+
+      // only store if query was valid
+      if (resp.contains("success")) {
+        db.setLocationData(resp);
+      }
+
+      return resp;
     } catch (Exception e) {
       // params not properly formatted in request
       return new ErrRequestResponse().serialize();

@@ -6,6 +6,8 @@ import com.squareup.moshi.Moshi;
 /** Response object to send, containing success notification and csv content */
 public record WeatherSuccessResponse(
     String result,
+    String city,
+    String state,
     Double temp,
     Double feelsLike,
     String descr,
@@ -14,8 +16,15 @@ public record WeatherSuccessResponse(
     Double snow) {
 
   public WeatherSuccessResponse(
-      Double temp, Double feelsLike, String descr, String icon, Double rain, Double snow) {
-    this("success", temp, feelsLike, descr, icon, rain, snow);
+      String city,
+      String state,
+      Double temp,
+      Double feelsLike,
+      String descr,
+      String icon,
+      Double rain,
+      Double snow) {
+    this("success", city, state, temp, feelsLike, descr, icon, rain, snow);
   }
 
   /**

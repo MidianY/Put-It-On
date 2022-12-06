@@ -28,6 +28,8 @@ public class TestWeatherUnit {
     assertTrue(responseMap.containsKey("icon"));
     assertTrue(responseMap.containsKey("rain"));
     assertTrue(responseMap.containsKey("snow"));
+    assertTrue(responseMap.containsKey("city"));
+    assertTrue(responseMap.containsKey("state"));
   }
 
   /**
@@ -53,13 +55,14 @@ public class TestWeatherUnit {
   public void mockTestMapResponse() throws IOException {
     String rainSnowJson = MockedWeatherJsons.RainSnow;
     String expectedJson = MockedWeatherJsons.RainSnowResponse;
-    assertEquals(expectedJson, weatherAPI.getWeatherDataFromJson(rainSnowJson));
+    assertEquals(expectedJson, weatherAPI.getWeatherDataFromJson(rainSnowJson, "Portland", "OR"));
 
     String noRainSnowJson = MockedWeatherJsons.noRainSnow;
     String expectedJson2 = MockedWeatherJsons.noRainSnowResponse;
-    assertEquals(expectedJson2, weatherAPI.getWeatherDataFromJson(noRainSnowJson));
+    assertEquals(
+        expectedJson2, weatherAPI.getWeatherDataFromJson(noRainSnowJson, "Portland", "OR"));
     assertEquals(
         new ErrDatasourceResponse().serialize(),
-        weatherAPI.getWeatherDataFromJson(MockedWeatherJsons.InValidResponse));
+        weatherAPI.getWeatherDataFromJson(MockedWeatherJsons.InValidResponse, "Portland", "OR"));
   }
 }
