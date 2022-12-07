@@ -31,28 +31,10 @@ export default function Closet() {
     //     setViewCloset(!viewCloset)
     // }
     const [closetItems, setClosetItems] = useState(new Map<string, string[]>());
-    const chooseClothingItem = (color: string, clothingType: string) => {
-        if (Array.from(closetItems.keys()).includes(clothingType)) {
-            let clothingList: string[] | undefined = closetItems.get(clothingType);
-            if (clothingList !== undefined) {
-                if (!clothingList.includes(color)) {
-                    clothingList.push(color);
-                    let newClosetItems = new Map(closetItems);
-                    newClosetItems.set(clothingType, clothingList);
-                    setClosetItems(newClosetItems);
-                }
-            }
-        }
-        else {
-            let newClosetItems = new Map(closetItems);
-            newClosetItems.set(clothingType, [color]);
-            setClosetItems(newClosetItems);
-        }
-    }
     return(
         <div>
         <div className="Page-header">Closet</div>
-        <ClothingOptions chooseClothingItem={chooseClothingItem}/>
+        <ClothingOptions />
         <UserCloset closetItems={closetItems}/>
         {/* {!viewCloset &&
         <ClothingOptions />}

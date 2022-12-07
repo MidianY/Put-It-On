@@ -1,34 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './Components.css';
 import ClothingItem from "./clothingItem";
-
-// export default function UserCloset() {
-//     const removeItem = (key: string, color: string) => {
-//         const keyColors: string[] | undefined = closetClothes.get(key);
-//         if (keyColors !== undefined) {
-//             console.log(keyColors.splice(keyColors.indexOf(color), 1));
-//             keyColors.splice(keyColors.indexOf(color), 1);
-//             closetClothes.set(key, keyColors);
-//         }
-//     }
-//     return (
-//     <div className="clothing-options">
-//         {/* {Array.from(closetClothes.keys()).map((key) => {
-//         return closetClothes.get(key)?.map((color) => {
-//             return (
-//             <ClothingItem
-//                 color={color}
-//                 clothingType={key}
-//                 itemClicked={false}
-//                 onSelect={() => removeItem(key, color)}
-//                 inCloset={true}/>
-//             )
-//         })
-//     })} */}
-//     </div>
-//     );
-    
-// }
+import closetData from "../mocks/mockCloset.json"
 
 export default function UserCloset({closetItems}: {closetItems: Map<string, string[]>}) {
     // const removeItem = (key: string, color: string) => {
@@ -43,9 +16,10 @@ export default function UserCloset({closetItems}: {closetItems: Map<string, stri
     // function updateState() {
     //     return () => setValue(value => value + 1);
     // }
+    const closet: any = closetData.closet;
     return (
     <div >
-        {Array.from(closetItems.keys()).map((key) => {
+        {/* {Array.from(closetItems.keys()).map((key) => {
         return closetItems.get(key)?.map((color) => {
             return (
             <ClothingItem
@@ -57,7 +31,19 @@ export default function UserCloset({closetItems}: {closetItems: Map<string, stri
                 chooseClothingItem={() => null}/>
             )
         })
-    })}
+    })} */}
+            {/* {closet.map((item: any) => {
+            return (
+            <ClothingItem
+                color={item.color}
+                clothingType={item.item}
+                itemClicked={false}
+                onSelect={() => null}
+                inCloset={true}
+                chooseClothingItem={() => null}/>
+            )
+        })
+    } */}
     </div>
     );
     
