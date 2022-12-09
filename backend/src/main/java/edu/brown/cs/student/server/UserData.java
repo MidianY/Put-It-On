@@ -2,6 +2,9 @@ package edu.brown.cs.student.server;
 
 import edu.brown.cs.student.closet.Closet;
 
+/**
+ * Class represents the shared state 
+ */
 public class UserData {
   private String locationData; // json string of weather data including city/state
   private Closet currentCloset; // class representing the current closet data
@@ -25,4 +28,5 @@ public class UserData {
   public Closet getCurrentCloset(){
     return this.currentCloset;
   }
+
 }

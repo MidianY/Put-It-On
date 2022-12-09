@@ -6,9 +6,13 @@ import java.util.*;
  */
 public class Closet {
     private Map<String, Map<String,String>> clothing;
+    private ArrayList validClothesNames;
 
     public Closet(){
         this.clothing = new HashMap<>();
+        this.validClothesNames = new ArrayList<>(Arrays.asList("jeans", "pants", "sweats", "shorts", "skirt",
+                "top", "hoodie", "shirt", "long-sleeve", "short-sleeve", "sweater", "tank",
+                "jacket", "coat", "hoodie", "shoes", "sneakers", "boots"));
     }
 
     /**
@@ -18,33 +22,9 @@ public class Closet {
      * @param name
      */
     public void addClothing(String color, String name){
-        ArrayList<String> validBottomNames = new ArrayList<>(Arrays.asList("jeans", "pants", "sweats", "shorts", "skirt"));
-        ArrayList<String> validTopNames = new ArrayList<>(Arrays.asList("top", "hoodie", "shirt", "long-sleeve", "short-sleeve", "sweater", "tank"));
-        ArrayList<String> validOuterNames = new ArrayList<>(Arrays.asList("jacket", "coat", "hoodie"));
-        ArrayList<String> validShoeNames = new ArrayList<>(Arrays.asList("shoes", "sneakers", "boots"));
-
         String clothingName = color+" "+name;
-
         try {
-            if(checkValidity(validBottomNames, name)){
-                Map<String, String> colorItemMap = new HashMap<>();
-                colorItemMap.put("item",name);
-                colorItemMap.put("color",color);
-                this.clothing.put(clothingName, colorItemMap);
-
-            }else if(checkValidity(validTopNames, name)){
-                Map<String, String> colorItemMap = new HashMap<>();
-                colorItemMap.put("item",name);
-                colorItemMap.put("color",color);
-                this.clothing.put(clothingName, colorItemMap);
-
-            }else if(checkValidity(validOuterNames, name)){
-                Map<String, String> colorItemMap = new HashMap<>();
-                colorItemMap.put("item",name);
-                colorItemMap.put("color",color);
-                this.clothing.put(clothingName, colorItemMap);
-
-            }else if(checkValidity(validShoeNames, name)){
+            if(checkValidity(this.validClothesNames, name)){
                 Map<String, String> colorItemMap = new HashMap<>();
                 colorItemMap.put("item",name);
                 colorItemMap.put("color",color);
