@@ -76,6 +76,7 @@ public class TestClosetUnit {
         List<Map<String, String>> clothesList = new ArrayList<>();
         clothesList.addAll(expectedResponse.values());
 
+
         assertEquals(closet.getClothesData().size(), 1);
         assertEquals(closet.getClothesData(), clothesList);
     }

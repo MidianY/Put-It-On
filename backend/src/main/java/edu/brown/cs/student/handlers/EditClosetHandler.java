@@ -45,7 +45,7 @@ public class EditClosetHandler implements Route {
             if (!qm.hasKey("item") || !qm.hasKey("color") || !qm.hasKey("action")) {
                 return new BadRequestError().serialize();
             }
-            if(checkValidity(this.validClothesNames, clothingItem) && checkValidityColor(color)){
+            if(checkValidity(this.validClothesNames, clothingItem)){
                 if(action.equals("add")) {
                     this.db.getCurrentCloset().addClothing(color, clothingItem);
                     return new EditSuccessResponse(color, clothingItem, action).serialize();
@@ -88,19 +88,6 @@ public class EditClosetHandler implements Route {
      */
     private boolean checkValidity(List clothes, String name){
         if (clothes.contains(name)){
-            return true;
-        } return false;
-    }
-
-    /**
-     * Method checks if the color written is a valid color
-     * @param name
-     * @return
-     */
-    private boolean checkValidityColor(String name){
-        ArrayList<String> colorName = new ArrayList<>(Arrays.asList("black", "blue", "yellow",
-                "green", "orange", "purple", "indigo", "violet", "red"));
-        if (colorName.contains(name)){
             return true;
         } return false;
     }
