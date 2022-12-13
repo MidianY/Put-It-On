@@ -59,17 +59,23 @@ public class EditClosetHandler implements Route {
     String clothingItem = qm.value("item");
     String action = qm.value("action");
 
-    try {
-      if (!qm.hasKey("item") || !qm.hasKey("color") || !qm.hasKey("action")) {
-        return new BadRequestError().serialize();
-      }
-      if (checkValidity(this.validClothesNames, clothingItem) && checkValidityColor(color)) {
-        if (action.equals("add")) {
-          this.db.getCurrentCloset().addClothing(color, clothingItem);
-          return new EditSuccessResponse(color, clothingItem, action).serialize();
-        } else if (action.equals("remove")) {
-          this.db.getCurrentCloset().removeClothing(color, clothingItem);
-          return new EditSuccessResponse(color, clothingItem, action).serialize();
+        try {
+            if (!qm.hasKey("item") || !qm.hasKey("color") || !qm.hasKey("action")) {
+                return new BadRequestError().serialize();
+            }
+            if(checkValidity(this.validClothesNames, clothingItem)){
+                if(action.equals("add")) {
+                    this.db.getCurrentCloset().addClothing(color, clothingItem);
+                    return new EditSuccessResponse(color, clothingItem, action).serialize();
+                }else if (action.equals("remove")){
+                    this.db.getCurrentCloset().removeClothing(color, clothingItem);
+                    return new EditSuccessResponse(color, clothingItem, action).serialize();
+                }
+            }
+            return new BadClothingError().serialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
       }
       return new BadClothingError().serialize();
@@ -107,23 +113,4 @@ public class EditClosetHandler implements Route {
     if (clothes.contains(name)) {
       return true;
     }
-    return false;
-  }
-
-  /**
-   * Method checks if the color written is a valid color
-   *
-   * @param name
-   * @return
-   */
-  private boolean checkValidityColor(String name) {
-    ArrayList<String> colorName =
-        new ArrayList<>(
-            Arrays.asList(
-                "white", "black", "khaki", "blue", "lightblue","red", "green", "yellow", "purple", "pink", "orange", "brown","grey"));
-    if (colorName.contains(name)) {
-      return true;
-    }
-    return false;
-  }
 }
