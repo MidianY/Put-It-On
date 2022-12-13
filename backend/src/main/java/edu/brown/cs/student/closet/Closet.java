@@ -38,17 +38,6 @@ public class Closet {
         }
     }
 
-      } else if (checkValidity(validShoeNames, name)) {
-        Map<String, String> colorItemMap = new HashMap<>();
-        colorItemMap.put("item", name);
-        colorItemMap.put("color", color);
-        this.clothing.put(clothingName, colorItemMap);
-      }
-    } catch (Exception e) {
-      throw new IllegalArgumentException();
-    }
-  }
-
   /**
    * Method used to validate whether the item of clothing the user typed is a valid clothing item to
    * add into the closet
@@ -80,12 +69,13 @@ public class Closet {
     }
   }
 
-  /**
-   * @return List of dictionaries of clothing data
-   */
-  public List<Map<String, String>> getClothesData() {
-    List<Map<String, String>> clothesList = new ArrayList<>();
-    clothesList.addAll(this.clothing.values());
-    return clothesList;
-  }
+      /**
+       * @return List of dictionaries of clothing data
+       */
+      public List<Map<String, String>> getClothesData() {
+        List<Map<String, String>> clothesList = new ArrayList<>();
+        clothesList.addAll(this.clothing.values());
+        return clothesList;
+      }
 }
+
