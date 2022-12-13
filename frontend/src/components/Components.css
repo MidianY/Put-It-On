@@ -11,6 +11,14 @@
     cursor: grab;
 }
 
+.closet-item {
+    width: 100px;
+    height: 100px;
+    grid-area: overlap;
+    align-self: center;
+    justify-self: center;
+}
+
 .clothing-box {
     width: 170px;
     height: 170px;
@@ -19,14 +27,41 @@
     cursor: grab;
 }
 
+.closet-box {
+    width: 170px;
+    height: 170px;
+    grid-area: overlap;
+    color: white;
+}
+
+.delete-clothing {
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    width: 50px;
+    height: 50px;
+    cursor: grab;
+}
+
 .clothing-container {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.closet-container {
+    display: grid;
 }
 
 .clothing-options {
     display: flex;
     flex-direction: row;
+}
+
+.closet-options {
+    display: flex;
+    flex-direction: row;
+    margin-top: 150px;
+    flex-wrap: wrap;
 }
 
 .color-box {

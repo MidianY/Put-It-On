@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.brown.cs.student.weather.ErrDatasourceResponse;
-import edu.brown.cs.student.weather.WeatherAPIUtilities;
 import edu.brown.cs.student.weather.Weather;
+import edu.brown.cs.student.weather.WeatherAPIUtilities;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
