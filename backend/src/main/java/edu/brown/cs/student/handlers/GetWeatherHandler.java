@@ -31,6 +31,7 @@ public class GetWeatherHandler implements Route {
       if (this.db.getLocationData() == null) {
         return new ErrDatasourceResponse().serialize();
       }
+//      return "Data is stored";
       return this.db.getLocationData();
     } catch (Exception e) {
       System.out.println("The following exception occurred: " + e.getMessage());

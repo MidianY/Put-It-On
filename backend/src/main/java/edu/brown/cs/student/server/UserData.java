@@ -11,7 +11,7 @@ public class UserData {
     this.currentCloset = new Closet();
   }
 
-  //method sets the cuurrent location data
+  //method sets the current location data
   public void setLocationData(String locationData) {
     this.locationData = locationData;
   }

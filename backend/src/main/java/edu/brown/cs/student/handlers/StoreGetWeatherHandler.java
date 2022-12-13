@@ -52,4 +52,5 @@ public class StoreGetWeatherHandler implements Route {
       return new ErrRequestResponse().serialize();
     }
   }
+
 }
