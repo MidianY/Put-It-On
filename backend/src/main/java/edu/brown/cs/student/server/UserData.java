@@ -20,13 +20,13 @@ public class UserData {
     this.locationData = locationData;
   }
 
-  //method returns the current location data
+  // method returns the current location data
   public String getLocationData() {
     return locationData;
   }
 
-  //method returns the current closet the user has
-  public Closet getCurrentCloset(){
+  // method returns the current closet the user has
+  public Closet getCurrentCloset() {
     return this.currentCloset;
   }
 }

@@ -1,14 +1,13 @@
 package edu.brown.cs.student.ClosetTest;
 
-import edu.brown.cs.student.closet.Closet;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import edu.brown.cs.student.closet.Closet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 public class TestClosetUnit {
 
