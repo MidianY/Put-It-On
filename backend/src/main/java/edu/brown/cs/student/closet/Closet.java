@@ -7,36 +7,55 @@ import java.util.*;
  * this class.
  */
 public class Closet {
-    private Map<String, Map<String,String>> clothing;
-    private ArrayList validClothesNames;
+  private Map<String, Map<String, String>> clothing;
+  private ArrayList validClothesNames;
 
-    public Closet(){
-        this.clothing = new HashMap<>();
-        this.validClothesNames = new ArrayList<>(Arrays.asList("jeans", "pants", "sweats", "shorts", "skirt",
-                "top", "hoodie", "shirt", "long-sleeve", "short-sleeve", "sweater", "tank",
-                "jacket", "coat", "hoodie", "shoes", "sneakers", "boots"));
+  public Closet() {
+    this.clothing = new HashMap<>();
+    this.validClothesNames =
+        new ArrayList<>(
+            Arrays.asList(
+                "jeans",
+                "pants",
+                "sweats",
+                "shorts",
+                "skirt",
+                "top",
+                "hoodie",
+                "shirt",
+                "long-sleeve",
+                "short-sleeve",
+                "sweater",
+                "tank",
+                "jacket",
+                "coat",
+                "hoodie",
+                "shoes",
+                "sneakers",
+                "boots"));
+  }
+
+  /**
+   * Method adds clothing into the closet. Checks which of the clothing categories it fits into and
+   * adds it into the closet respectively
+   *
+   * @param color
+   * @param name
+   */
+  public void addClothing(String color, String name) {
+    String clothingName = color + " " + name;
+
+    try {
+      if (checkValidity(this.validClothesNames, name)) {
+        Map<String, String> colorItemMap = new HashMap<>();
+        colorItemMap.put("item", name);
+        colorItemMap.put("color", color);
+        this.clothing.put(clothingName, colorItemMap);
+      }
+    } catch (Exception e) {
+      throw new IllegalArgumentException();
     }
-
-    /**
-     * Method adds clothing into the closet. Checks which of the clothing categories it fits into
-     * and adds it into the closet respectively
-     * @param color
-     * @param name
-     */
-    public void addClothing(String color, String name){
-        String clothingName = color+" "+name;
-
-        try {
-            if(checkValidity(this.validClothesNames, name)){
-                Map<String, String> colorItemMap = new HashMap<>();
-                colorItemMap.put("item",name);
-                colorItemMap.put("color",color);
-                this.clothing.put(clothingName, colorItemMap);
-            }
-        } catch (Exception e) {
-            throw new IllegalArgumentException();
-        }
-    }
+  }
 
   /**
    * Method used to validate whether the item of clothing the user typed is a valid clothing item to
@@ -47,10 +66,11 @@ public class Closet {
    * @return
    */
   private boolean checkValidity(List clothes, String name) {
-    if (clothes.contains(name)) {
-      return true;
-    }
-    return false;
+    //    if (clothes.contains(name)) {
+    //      return true;
+    //    }
+    //    return false;
+    return true;
   }
 
   /**
@@ -69,13 +89,12 @@ public class Closet {
     }
   }
 
-      /**
-       * @return List of dictionaries of clothing data
-       */
-      public List<Map<String, String>> getClothesData() {
-        List<Map<String, String>> clothesList = new ArrayList<>();
-        clothesList.addAll(this.clothing.values());
-        return clothesList;
-      }
+  /**
+   * @return List of dictionaries of clothing data
+   */
+  public List<Map<String, String>> getClothesData() {
+    List<Map<String, String>> clothesList = new ArrayList<>();
+    clothesList.addAll(this.clothing.values());
+    return clothesList;
+  }
 }
-

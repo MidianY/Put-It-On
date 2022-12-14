@@ -24,21 +24,22 @@ weatherIconMap.set("13n", [WiSnow])
 weatherIconMap.set("50d", [WiFog])
 weatherIconMap.set("50n", [WiFog])
 
-// const weatherMap: Map<string, string> = new Map();
-
-
 function returnWeatherIcon(icon : string) {
     const iconResult = weatherIconMap.get(icon);
+    let size: number = 50;
+    if (icon === "01d" || icon === "01n") {
+        size = 40;
+    }
     if (iconResult !== undefined) {
         const WeatherIcon = iconResult[0];
         if (iconResult.length === 2) {
             return(
-                <WeatherIcon size={50} fill={iconResult[1]}/>
+                <WeatherIcon size={size} fill={iconResult[1]}/>
             )
         }
         else {
             return(
-                <WeatherIcon size={50}/>
+                <WeatherIcon size={size}/>
             )
         }
     }

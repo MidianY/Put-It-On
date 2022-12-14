@@ -9,8 +9,7 @@ import ClothingItem from "../components/clothingItem";
 export default function Closet() {
     const navigate = useNavigate();
     const [closetItems, setClosetItems] = useState<Map<string, string>[]>([]);
-    const fetchCloset = async() => {
-        console.log("hi");
+    const fetchCloset = async(): Promise<void> => {
         let closet = await fetch("http://localhost:3230/getCloset")
         .then(response => response.json()).then(json => {return json})
         .catch(err => console.log('error', err))
@@ -23,7 +22,6 @@ export default function Closet() {
             setClosetItems(clothesList);
         }
     }
-    // console.log(closetItems);
     
     useEffect(() => {
         fetchCloset();
@@ -32,13 +30,9 @@ export default function Closet() {
     return(
         <div>
         <div className="Page-header">Closet</div>
+        <div className="closet-instructions">Click on a clothing item and color to add it to your closet!</div>
         <ClothingOptions pickColor={fetchCloset}/>
-        <UserCloset closetItems={closetItems}/>
-        {/* {!viewCloset &&
-        <ClothingOptions />}
-        {viewCloset &&
-        <UserCloset/>}
-        <Button onClick={clickCloset}>{viewCloset ? "Hide Closet" : "View Closet"}</Button> */}
+        <UserCloset closetItems={closetItems} pickColor={fetchCloset}/>
         <Button className="page-button" onClick={() => {navigate("/")}}>Return home</Button>
         </div> 
     )

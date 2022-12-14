@@ -6,12 +6,15 @@ import Button from 'react-bootstrap/Button';
 import CitySearch from "../components/citySearch";
 import WeatherDisplay from "../components/weatherDisplay";
 import {ReactComponent as PersonIcon} from '../icons/person.svg'
+import RecommendedOutfit from "../components/recOutfit";
 
 export default function Home() {
     const navigate = useNavigate();
     const [chosenCity, setChosenCity] = useState("");
     const [weatherMap, setWeatherMap] = useState(new Map<string, string>());
     const [weatherLoaded, setWeatherLoaded] = useState(false);
+    const [outfitButtonClicked, setOutfitButtonClicked] = useState(false);
+    const weatherAvailable: boolean = weatherLoaded || sessionStorage.getItem("weatherLoaded") == "true";
     const chooseCity = (city: string) => {
         setChosenCity(city);
         getWeather(city);
@@ -43,8 +46,10 @@ export default function Home() {
             <div className="Page-header">Put It On!</div>
             <CitySearch onSelect={chooseCity}/>
             <WeatherDisplay city={chosenCity} weather={weatherMap} loaded={weatherLoaded}/>
+            {weatherAvailable &&<Button className="outfit-button" onClick={() => setOutfitButtonClicked(true)}>Get Today's Outfit!</Button>}
             <Button className="page-button" onClick={() => {navigate("/closet")}}>Go to closet</Button>
-            <PersonIcon className="person" fill="white" />
+            {/* <PersonIcon className="person" fill="white" /> */}
+            {outfitButtonClicked && <RecommendedOutfit />}
         </div>
     )
 }
