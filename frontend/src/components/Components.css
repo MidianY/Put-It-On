@@ -17,6 +17,13 @@
     grid-area: overlap;
     align-self: center;
     justify-self: center;
+    flex-basis: '50%'
+}
+
+.outfit-item {
+    width: 175px;
+    height: 175px;
+    padding-bottom: 0;
 }
 
 .clothing-box {
@@ -55,13 +62,16 @@
 .clothing-options {
     display: flex;
     flex-direction: row;
+    position: relative;
+    margin-top: 40px;
 }
 
 .closet-options {
-    display: flex;
-    flex-direction: row;
-    margin-top: 150px;
-    flex-wrap: wrap;
+    margin-top: 160px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    padding-bottom: 50px;
+    /* grid-template-rows: repeat(4, 150px); */
 }
 
 .color-box {
@@ -98,6 +108,34 @@
     bottom: 0;
 }
 
+.closet-instructions {
+    position: absolute;
+    font-size: calc(5px + 2vmin);
+    color: black;
+    left: 50px;
+    top: 280px;
+    width: 200px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    padding: 0;
+}
+
+.outfit {
+    position: absolute;
+    left: 50px;
+    top: 100px;
+    padding-bottom: 50px;
+}
+
+.item-not-closet {
+    padding-right: 0%;
+    margin-right: 75%;
+    position: relative;
+    left: 190px;
+    top: 100px;
+}
+
 .person {
     width: 600px;
     height: 600px;
@@ -113,7 +151,7 @@
     background-color: white;
     margin-top: 5px;
     position: relative;
-    left: 95px;
+    left: 113px;
 }
 
 .citySearchOptions .citySearchOption {
@@ -127,4 +165,52 @@
 
 .citySearchOption:hover {
     background-color: lightgrey;
+}
+
+.closet-stats{
+    position: fixed;
+    right: 20px;
+  }
+  
+.tops-stat {
+  padding: 20px;
+  right: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.bottoms-stat {
+  padding: 20px;
+  right: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.outers-stat {
+  padding: 20px;
+  right: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.shoes-stat {
+  padding: 20px;
+  right: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+}
+.stats-icon {
+    height: 60px;
+    width: 60px;
+    padding-left: 10px;
+}
+
+.instructions-button {
+    position: fixed;
+    right: 50px;
+    top: 40px;
 }

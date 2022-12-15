@@ -72,6 +72,7 @@ public class Closet {
         }
     }
 
+
       /**
        * Method removes clothes from the closet
        *
@@ -149,6 +150,4 @@ public class Closet {
         return clothesList;
     }
 
-
 }
-
