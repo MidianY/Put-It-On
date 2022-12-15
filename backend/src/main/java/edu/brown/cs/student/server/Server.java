@@ -2,10 +2,7 @@ package edu.brown.cs.student.server;
 
 import static spark.Spark.after;
 
-import edu.brown.cs.student.handlers.EditClosetHandler;
-import edu.brown.cs.student.handlers.GetClosetHandler;
-import edu.brown.cs.student.handlers.GetWeatherHandler;
-import edu.brown.cs.student.handlers.StoreGetWeatherHandler;
+import edu.brown.cs.student.handlers.*;
 import spark.Spark;
 
 /**
@@ -49,7 +46,9 @@ public class Server {
     Spark.get("storeGetWeatherData", new StoreGetWeatherHandler(userDB));
     Spark.get("getWeatherData", new GetWeatherHandler(userDB));
     Spark.get("getCloset", new GetClosetHandler(userDB));
+    Spark.get("getClosetStats", new GetClosetStatsHandler(userDB));
     Spark.get("editCloset", new EditClosetHandler(userDB));
+
 
     Spark.init();
     Spark.awaitInitialization();
