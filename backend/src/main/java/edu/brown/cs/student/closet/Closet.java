@@ -73,6 +73,7 @@ public class Closet {
             throw new IllegalArgumentException();
         }
     }
+  }
 
       /**
        * Method removes clothes from the closet
@@ -133,6 +134,4 @@ public class Closet {
         return clothesList;
     }
 
-
 }
-

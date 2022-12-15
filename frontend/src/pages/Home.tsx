@@ -5,13 +5,96 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import CitySearch from "../components/citySearch";
 import WeatherDisplay from "../components/weatherDisplay";
-import {ReactComponent as PersonIcon} from '../icons/person.svg'
+import RecommendedOutfit from "../components/recOutfit";
+import { clothingTypeMap } from "../components/clothingItem";
+import { OverlayTrigger, Popover } from "react-bootstrap";
+
+const clothingSectionMap: Map<string, string> = new Map();
+clothingSectionMap.set("short-sleeve", "Top");
+clothingSectionMap.set("long-sleeve", "Top");
+clothingSectionMap.set("tank", "Top");
+clothingSectionMap.set("sweatshirt", "Top");
+clothingSectionMap.set("pants", "Bottom");
+clothingSectionMap.set("shorts", "Bottom");
+clothingSectionMap.set("skirt", "Bottom");
+clothingSectionMap.set("hoodie", "Outer");
+clothingSectionMap.set("jacket", "Outer");
+clothingSectionMap.set("coat", "Outer");
+clothingSectionMap.set("sneakers", "Shoes");
+clothingSectionMap.set("boots", "Shoes");
+
+function getStatsClothingIcon(clothingType : string) {
+    const ClothingIcon = clothingTypeMap.get(clothingType);
+    return(
+        <ClothingIcon className="stats-icon" fill="white" />
+    )
+}
+
+function ClosetStats() {
+    let tops: number = 0;
+    let bottoms: number = 0;
+    let outers: number = 0;
+    let shoes: number = 0;
+    return(
+        <div className="closet-stats">
+            In your closet, you have:
+            <div className="tops-stat">
+                <div>
+                    <strong>{tops}</strong> Tops
+                </div>
+                <div >
+                    {getStatsClothingIcon("short-sleeve")}
+                </div>
+            </div>
+            <div className="bottoms-stat">
+                <div >
+                    <strong>{bottoms}</strong> Bottoms
+                </div>
+                <div>
+                    {getStatsClothingIcon("shorts")}
+                </div>
+            </div>
+            <div className="outers-stat">
+                <div >
+                    <strong>{outers}</strong> Outerwear
+                </div>
+                <div>
+                    {getStatsClothingIcon("jacket")}
+                </div>
+            </div>
+            <div className="shoes-stat">
+                <div >
+                    <strong>{shoes}</strong> Shoes
+                </div>
+                <div>
+                    {getStatsClothingIcon("sneakers")}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+    
+const instructionsPopover = (
+  <Popover id="popover-basic">
+    <Popover.Header as="h3">How to Use Put It On!</Popover.Header>
+    <Popover.Body>
+    1. Enter the name of your city
+    <br/>
+    2. Add your clothes to your closet
+    <br/>
+    3. Click <strong>Get Today's Outfit!</strong> to receive today's recommended outfit based on your weather and closet!
+    </Popover.Body>
+  </Popover>
+);
 
 export default function Home() {
     const navigate = useNavigate();
     const [chosenCity, setChosenCity] = useState("");
     const [weatherMap, setWeatherMap] = useState(new Map<string, string>());
     const [weatherLoaded, setWeatherLoaded] = useState(false);
+    const [outfitButtonClicked, setOutfitButtonClicked] = useState(false);
+    const weatherAvailable: boolean = weatherLoaded || sessionStorage.getItem("weatherLoaded") == "true";
     const chooseCity = (city: string) => {
         setChosenCity(city);
         getWeather(city);
@@ -40,11 +123,16 @@ export default function Home() {
     }
     return(
         <div>
-            <div className="Page-header">Put It On!</div>
+            <div aria-label="put it on page header" className="Page-header">Put It On!</div>
             <CitySearch onSelect={chooseCity}/>
             <WeatherDisplay city={chosenCity} weather={weatherMap} loaded={weatherLoaded}/>
-            <Button className="page-button" onClick={() => {navigate("/closet")}}>Go to closet</Button>
-            <PersonIcon className="person" fill="white" />
+            {weatherAvailable &&<Button role="outfit-button" className="outfit-button" onClick={() => setOutfitButtonClicked(true)}>Get Today's Outfit!</Button>}
+            <Button aria-label="button to go to closet page" className="page-button" onClick={() => {navigate("/closet")}}>Go to closet</Button>
+            <ClosetStats/>
+            <OverlayTrigger trigger="click" placement="bottom" overlay={instructionsPopover}>
+                <Button className="instructions-button" variant="success">Click for Put It On! Instructions</Button>
+            </OverlayTrigger>
+            {outfitButtonClicked && <RecommendedOutfit />}
         </div>
     )
 }
