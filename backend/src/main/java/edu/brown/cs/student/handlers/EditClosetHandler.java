@@ -44,15 +44,15 @@ public class EditClosetHandler implements Route {
             if (!qm.hasKey("item") || !qm.hasKey("color") || !qm.hasKey("action")) {
                 return new BadRequestError().serialize();
             }
-            if(checkValidity(this.validClothesNames, clothingItem) && checkValidityColor(color)){
-                if(action.equals("add")) {
-                    this.db.getCurrentCloset().addClothing(color, clothingItem);
-                    return new EditSuccessResponse(color, clothingItem, action).serialize();
-                }else if (action.equals("remove")){
-                    this.db.getCurrentCloset().removeClothing(color, clothingItem);
-                    return new EditSuccessResponse(color, clothingItem, action).serialize();
-                }
+
+            if(action.equals("add")) {
+                this.db.getCurrentCloset().addClothing(color, clothingItem);
+                return new EditSuccessResponse(color, clothingItem, action).serialize();
+            }else if (action.equals("remove")){
+                this.db.getCurrentCloset().removeClothing(color, clothingItem);
+                return new EditSuccessResponse(color, clothingItem, action).serialize();
             }
+
             return new BadClothingError().serialize();
         } catch (Exception e) {
             e.printStackTrace();

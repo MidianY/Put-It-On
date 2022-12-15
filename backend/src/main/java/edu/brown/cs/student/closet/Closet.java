@@ -10,7 +10,6 @@ public class Closet {
     private Map<String, Map<String,String>> clothing;
     private Map<String, Integer> clothingStats;
 
-    private ArrayList validClothesNames;
     private ArrayList validTopNames;
     private ArrayList validBottomNames;
     private ArrayList validShoeNames;
@@ -30,14 +29,10 @@ public class Closet {
         this.shoes = 0;
         this.outer = 0;
 
-        this.validClothesNames = new ArrayList<>(Arrays.asList("jeans", "pants", "sweats", "shorts", "skirt",
-                "top", "hoodie", "shirt", "long-sleeve", "short-sleeve", "sweater", "tank",
-                "jacket", "coat", "hoodie", "shoes", "sneakers", "boots"));
-
-        this.validTopNames = new ArrayList<>(Arrays.asList("top", "tank", "hoodie", "shirt", "long-sleeve", "short-sleeve", "sweater"));
-        this.validBottomNames = new ArrayList<>(Arrays.asList("jeans", "pants", "sweats", "shorts", "skirt"));
-        this.validOuterNames = new ArrayList<>(Arrays.asList("jacket", "coat", "hoodie"));
-        this.validShoeNames = new ArrayList<>(Arrays.asList("shoes", "sneakers", "boots"));
+        this.validTopNames = new ArrayList<>(Arrays.asList("short-sleeve", "long-sleeve", "tank", "sweatshirt"));
+        this.validBottomNames = new ArrayList<>(Arrays.asList("pants", "shorts", "skirt"));
+        this.validOuterNames = new ArrayList<>(Arrays.asList("hoodie", "jacket", "coat"));
+        this.validShoeNames = new ArrayList<>(Arrays.asList("sneakers", "boots"));
 
         this.clothingStats.put("Tops", this.tops);
         this.clothingStats.put("Bottoms", this.bottoms);
@@ -53,22 +48,25 @@ public class Closet {
      */
     public void addClothing(String color, String name){
 
-        if(checkValidity(this.validTopNames,name)){
-            this.tops++;
-        } else if (checkValidity(this.validBottomNames, name)){
-            this.bottoms++;
-        } else if (checkValidity(this.validShoeNames, name)){
-            this.shoes++;
-        } else if (checkValidity(this.validOuterNames, name)){
-            this.outer++;
-        }
-
         String clothingName = color+" "+name;
         try {
-            Map<String, String> colorItemMap = new HashMap<>();
-            colorItemMap.put("item",name);
-            colorItemMap.put("color",color);
-            this.clothing.put(clothingName, colorItemMap);
+            if(!(this.clothing.containsKey(clothingName))) {
+
+                if(checkValidity(this.validTopNames,name)){
+                    this.tops++;
+                } else if (checkValidity(this.validBottomNames, name)){
+                    this.bottoms++;
+                } else if (checkValidity(this.validShoeNames, name)){
+                    this.shoes++;
+                } else if (checkValidity(this.validOuterNames, name)){
+                    this.outer++;
+                }
+
+                Map<String, String> colorItemMap = new HashMap<>();
+                colorItemMap.put("item", name);
+                colorItemMap.put("color", color);
+                this.clothing.put(clothingName, colorItemMap);
+            }
         } catch (Exception e) {
             throw new IllegalArgumentException();
         }
@@ -81,21 +79,23 @@ public class Closet {
        * @param name
        */
       public void removeClothing(String color, String name) {
-
-          if(checkValidity(this.validTopNames,name)){
-              this.tops--;
-          } else if (checkValidity(this.validBottomNames, name)){
-              this.bottoms--;
-          } else if (checkValidity(this.validShoeNames, name)){
-              this.shoes--;
-          } else if (checkValidity(this.validOuterNames, name)){
-              this.outer--;
-          }
-
           String clothingName = color + " " + name;
+
           for (String clothes : this.clothing.keySet()) {
+
               if (clothingName.equals(clothes)) {
                   this.clothing.remove(clothingName);
+
+                  if(checkValidity(this.validTopNames,name)) {
+                      this.tops--;
+                  }
+                  else if (checkValidity(this.validBottomNames, name)){
+                      this.bottoms--;
+                  } else if (checkValidity(this.validShoeNames, name)){
+                      this.shoes--;
+                  } else if (checkValidity(this.validOuterNames, name)){
+                      this.outer--;
+                  }
                   break;
               }
           }
@@ -116,7 +116,23 @@ public class Closet {
         return false;
     }
 
+    private void setZero(){
+        if(this.tops<0){
+            this.tops = 0;
+
+        }if(this.bottoms<0){
+            this.bottoms = 0;
+
+        }if(this.outer<0){
+            this.outer = 0;
+
+        }if(this.shoes<0){
+            this.shoes = 0;
+        }
+    }
+
     public Map<String, Integer> getStats(){
+        this.setZero();
         this.clothingStats.put("Tops", this.tops);
         this.clothingStats.put("Bottoms", this.bottoms);
         this.clothingStats.put("Shoes", this.shoes);

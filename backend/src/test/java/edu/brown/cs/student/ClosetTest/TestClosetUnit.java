@@ -207,4 +207,54 @@ public class TestClosetUnit {
         assertEquals(closet.getClothesData(), clothesList);
         assertEquals(closet.getStats(), clothesStats);
     }
+
+    /**
+     * Test to ensure that the closet can properly add clothing items that are
+     * properly named
+     */
+    @Test
+    public void statsTest(){
+        Closet closet = new Closet();
+
+        String color = "blue";
+        String color2 = "red";
+        String color3 = "orange";
+        String color4 = "pink";
+
+        String shirt = "sweatshirt";
+        String tank = "tank";
+
+        closet.addClothing(color,shirt);
+        closet.addClothing(color2, shirt);
+        closet.addClothing(color3, shirt);
+        closet.addClothing(color4, shirt);
+        closet.addClothing(color, tank);
+
+//
+//        closet.removeClothing(color, shirt);
+//        closet.removeClothing(color3, shirt);
+//        closet.removeClothing(color2, shirt);
+//        closet.removeClothing(color2, shirt);
+//        closet.removeClothing(color2, shirt);
+
+
+        Map<String, Map<String,String>> expectedResponse = new HashMap<>();
+
+        Map<String,String> colorItem = new HashMap<>();
+        colorItem.put("color", color);
+        colorItem.put("item", shirt);
+
+        expectedResponse.put("clothing", colorItem);
+        List<Map<String, String>> clothesList = new ArrayList<>();
+        clothesList.addAll(expectedResponse.values());
+
+        Map<String,Integer> clothesStats = new HashMap<>();
+        clothesStats.put("Bottoms", 0);
+        clothesStats.put("Tops", 5);
+        clothesStats.put("Shoes", 0);
+        clothesStats.put("Outer", 0);
+
+        System.out.println(closet.getStats());
+        assertEquals(closet.getStats(), clothesStats);
+    }
 }
