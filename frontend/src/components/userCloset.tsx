@@ -15,7 +15,7 @@ export default function UserCloset({closetItems, pickColor}: {closetItems: Map<s
                     onSelect={() => null}
                     inCloset={true}
                     pickColor={pickColor}
-                    recommended={false}/>
+                    recommended={[false, false]}/>
                 )
             })}
         </div>

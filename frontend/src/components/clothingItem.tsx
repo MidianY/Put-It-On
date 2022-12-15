@@ -20,7 +20,7 @@ import { FaSquareFull } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
 
 
-const clothingTypeMap : Map<String, any> = new Map();
+export const clothingTypeMap : Map<String, any> = new Map();
 clothingTypeMap.set("short-sleeve", TShirtIcon);
 clothingTypeMap.set("long-sleeve", LongSleeveShirtIcon);
 clothingTypeMap.set("tank", TankIcon);
@@ -84,7 +84,7 @@ function ColorSelection({clothingType, pickColor}: {clothingType: string, pickCo
 }
 
 export default function ClothingItem({clothingType, color, itemClicked, onSelect, inCloset, pickColor, recommended}: 
-    {clothingType: string, color: string, itemClicked: boolean, onSelect: MouseEventHandler, inCloset: boolean, pickColor: MouseEventHandler, recommended: boolean}) {
+    {clothingType: string, color: string, itemClicked: boolean, onSelect: MouseEventHandler, inCloset: boolean, pickColor: MouseEventHandler, recommended: boolean[]}) {
     const [clothingClicked, setClothingClicked] = useState(false);
     const handleClothesClick = () => {
         setClothingClicked(!clothingClicked);
@@ -97,19 +97,20 @@ export default function ClothingItem({clothingType, color, itemClicked, onSelect
 
     return(
     <OverlayTrigger
-        placement={inCloset ? "bottom" : recommended ? "right" : "top"}
+        placement={inCloset ? "bottom" : recommended[0] ? "right" : "top"}
         overlay={
-            <Tooltip>{inCloset || recommended ? `${color.charAt(0).toUpperCase() + color.slice(1)} ${clothingType.charAt(0).toUpperCase() + clothingType.slice(1)}`: clothingType.charAt(0).toUpperCase() + clothingType.slice(1) }</Tooltip>
+            <Tooltip>{inCloset || (recommended[0] && recommended[1]) ?  `${color.charAt(0).toUpperCase() + color.slice(1)} ${clothingType.charAt(0).toUpperCase() + clothingType.slice(1)}`
+            : (recommended[0] && !recommended[1]) ? `${color.charAt(0).toUpperCase() + color.slice(1)} ${clothingType.charAt(0).toUpperCase() + clothingType.slice(1)} (Not in closet)` :clothingType.charAt(0).toUpperCase() + clothingType.slice(1) }</Tooltip>
         }>
     <div className="clothing-with-colors" onClick={onSelect}>
-        <div className={inCloset ? "closet-container" : !recommended? "clothing-container": ""} onClick={handleClothesClick}>
+        <div className={inCloset ? "closet-container" : !recommended[0]? "clothing-container": ""} onClick={handleClothesClick}>
             <div onClick={pickColor}>
             {inCloset && (
                 <TiDelete onClick={(event) => {removeItem(event); pickColor(event);}} className="delete-clothing" color="red"/>
             )}
             </div>
-            {!recommended && <RxBox color={inCloset ? "black" : "white"} className={inCloset ? "closet-box" :"clothing-box"}/>}
-            {returnClothingIcon(clothingType, color, inCloset, recommended)}
+            {!recommended[0] && <RxBox color={inCloset ? "black" : "white"} className={inCloset ? "closet-box" :"clothing-box"}/>}
+            {returnClothingIcon(clothingType, color, inCloset, recommended[0])}
         </div>
         {!inCloset && itemClicked && clothingClicked && (
             <ColorSelection clothingType={clothingType} pickColor={pickColor}/>

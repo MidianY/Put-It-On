@@ -8,7 +8,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
     const [clickedItemIndex, setClickedItemIndex] = useState(0);
     return(
         <Tabs fill justify>
-            <Tab eventKey="shirts" title="Shirts">
+            <Tab eventKey="tops" title="Tops">
                 <div className="clothing-options">
                     <ClothingItem 
                         clothingType="short-sleeve" 
@@ -17,7 +17,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(0)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="long-sleeve" 
@@ -26,7 +26,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(1)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="tank" 
@@ -35,7 +35,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(2)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="sweatshirt" 
@@ -44,11 +44,11 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(3)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                 </div> 
             </Tab>
-            <Tab eventKey="pants" title="Pants">
+            <Tab eventKey="bottoms" title="Bottoms">
             <div className="clothing-options">
                     <ClothingItem 
                         clothingType="pants" 
@@ -57,7 +57,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(0)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="shorts" 
@@ -66,7 +66,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(1)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="skirt" 
@@ -75,7 +75,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(2)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                 </div> 
             </Tab>
@@ -88,7 +88,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(0)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="jacket" 
@@ -97,7 +97,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(1)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="coat" 
@@ -106,7 +106,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(2)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                 </div> 
             </Tab>
@@ -119,7 +119,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(0)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
                         clothingType="boots" 
@@ -128,7 +128,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                         onSelect={() => setClickedItemIndex(1)}
                         inCloset={false}
                         pickColor={pickColor}
-                        recommended={false}
+                        recommended={[false, false]}
                         />
                 </div> 
             </Tab>
