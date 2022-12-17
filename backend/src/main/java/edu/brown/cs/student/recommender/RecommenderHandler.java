@@ -269,8 +269,12 @@ public class RecommenderHandler implements Route {
 
         Boolean outerTracker = false;
 
-
         for (int i = 0; i < availableClothing.size(); i++){
+
+            String outerWear = null;
+            String innerWear = null;
+            String bottomWear = null;
+            String footWear = null;
 
             if (availableClothing.get(0).size() == 0){
                 outerTracker = true;
@@ -315,7 +319,7 @@ public class RecommenderHandler implements Route {
 
             if (i == 0 && availableClothing.get(0).size() != 0){
                 outerTop = new HashMap<>();
-                outerTop.put("item", validInnerTopNames.get(new Random().nextInt(validInnerTopNames.size())));
+                outerTop.put("item", validOuterTopNames.get(new Random().nextInt(validOuterTopNames.size())));
                 outerTop.put("color", "white");
                 outerTop.put("inCloset","false");
                 outerTopList.add(outerTop);
@@ -342,6 +346,8 @@ public class RecommenderHandler implements Route {
                 footWearList.add(footwear);
             }
         }
+
+
 
         if(outerTracker){
             list.add(innerTopList);

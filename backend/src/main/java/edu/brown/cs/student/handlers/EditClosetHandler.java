@@ -4,31 +4,49 @@ import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.server.UserData;
 import edu.brown.cs.student.server.errorRepsonses.BadClothingError;
 import edu.brown.cs.student.server.errorRepsonses.BadRequestError;
+import java.util.*;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import java.util.*;
 
 /**
- * Class that processes the editCloset endpoint request. This class accesses
- * closet data from the user database shared state variable and edits the closet depending
- * on whether it is an add or remove request
+ * Class that processes the editCloset endpoint request. This class accesses closet data from the
+ * user database shared state variable and edits the closet depending on whether it is an add or
+ * remove request
  */
 public class EditClosetHandler implements Route {
     private UserData db;
     private ArrayList validClothesNames;
 
-
     public EditClosetHandler(UserData db) {
         this.db = db;
-        this.validClothesNames = new ArrayList<>(Arrays.asList("jeans", "pants", "sweats", "shorts", "skirt",
-                "top", "hoodie", "shirt", "long-sleeve", "short-sleeve", "sweater", "tank",
-                "jacket", "coat", "hoodie", "shoes", "sneakers", "boots"));
+        this.validClothesNames =
+                new ArrayList<>(
+                        Arrays.asList(
+                                "jeans",
+                                "pants",
+                                "sweats",
+                                "shorts",
+                                "skirt",
+                                "top",
+                                "hoodie",
+                                "shirt",
+                                "long-sleeve",
+                                "short-sleeve",
+                                "sweatshirt",
+                                "tank",
+                                "jacket",
+                                "coat",
+                                "hoodie",
+                                "shoes",
+                                "sneaker",
+                                "boot"));
     }
 
     /**
      * Method handles adding and removing clothing items from the closet
+     *
      * @param request
      * @param response
      * @return
@@ -45,15 +63,15 @@ public class EditClosetHandler implements Route {
             if (!qm.hasKey("item") || !qm.hasKey("color") || !qm.hasKey("action")) {
                 return new BadRequestError().serialize();
             }
-            if(checkValidity(this.validClothesNames, clothingItem) && checkValidityColor(color)){
-                if(action.equals("add")) {
-                    this.db.getCurrentCloset().addClothing(color, clothingItem);
-                    return new EditSuccessResponse(color, clothingItem, action).serialize();
-                }else if (action.equals("remove")){
-                    this.db.getCurrentCloset().removeClothing(color, clothingItem);
-                    return new EditSuccessResponse(color, clothingItem, action).serialize();
-                }
+
+            if(action.equals("add")) {
+                this.db.getCurrentCloset().addClothing(color, clothingItem);
+                return new EditSuccessResponse(color, clothingItem, action).serialize();
+            }else if (action.equals("remove")){
+                this.db.getCurrentCloset().removeClothing(color, clothingItem);
+                return new EditSuccessResponse(color, clothingItem, action).serialize();
             }
+
             return new BadClothingError().serialize();
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,9 +79,7 @@ public class EditClosetHandler implements Route {
         }
     }
 
-    /**
-     * Success response if the item can be added/removed from the closet
-     */
+    /** Success response if the item can be added/removed from the closet */
     public record EditSuccessResponse(String color, String item, String action) {
         /**
          * @return this response, serialized as Json
@@ -80,28 +96,37 @@ public class EditClosetHandler implements Route {
     }
 
     /**
-     * Method used to validate whether the item of clothing the user typed is a valid clothing
-     * item to add into the closet
+     * Method used to validate whether the item of clothing the user typed is a valid clothing item to
+     * add into the closet
+     *
      * @param clothes valid names for clothing items
      * @param name name the user types
      * @return
      */
-    private boolean checkValidity(List clothes, String name){
-        if (clothes.contains(name)){
-            return true;
-        } return false;
+    private boolean checkValidity(List clothes, String name) {
+        //    if (clothes.contains(name)) {
+        //      return true;
+        //    }
+        //    return false;
+        //  }
+        return true;
     }
 
     /**
      * Method checks if the color written is a valid color
+     *
      * @param name
      * @return
      */
-    private boolean checkValidityColor(String name){
-        ArrayList<String> colorName = new ArrayList<>(Arrays.asList("white", "black", "blue",
-                "khaki", "red", "green", "yellow", "purple", "pink", "brown","grey"));
-        if (colorName.contains(name)){
-            return true;
-        } return false;
-    }
+    //  private boolean checkValidityColor(String name) {
+    //    ArrayList<String> colorName =
+    //        new ArrayList<>(
+    //            Arrays.asList(
+    //                "black", "blue", "yellow", "green", "orange", "purple", "indigo", "violet",
+    // "red"));
+    //    if (colorName.contains(name)) {
+    //      return true;
+    //    }
+    //    return false;
+    //  }
 }
