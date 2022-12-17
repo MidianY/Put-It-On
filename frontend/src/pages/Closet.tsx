@@ -29,11 +29,11 @@ export default function Closet() {
 
     return(
         <div>
-        <div className="Page-header">Closet</div>
-        <div className="closet-instructions">Click on a clothing item and color to add it to your closet!</div>
+        <div aria-label="closet page header" className="Page-header">Closet</div>
+        <div aria-label="closet instructions" className="closet-instructions">Click on a clothing item and color to add it to your closet!</div>
         <ClothingOptions pickColor={fetchCloset}/>
         <UserCloset closetItems={closetItems} pickColor={fetchCloset}/>
-        <Button className="page-button" onClick={() => {navigate("/")}}>Return home</Button>
+        <Button aria-label="button to go to home page" className="page-button" onClick={() => {navigate("/")}}>Return home</Button>
         </div> 
     )
 }

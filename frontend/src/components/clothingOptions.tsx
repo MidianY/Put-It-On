@@ -7,9 +7,9 @@ import ClothingItem from "./clothingItem";
 export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandler}) {
     const [clickedItemIndex, setClickedItemIndex] = useState(0);
     return(
-        <Tabs fill justify>
+        <Tabs aria-label="closet options" fill justify>
             <Tab eventKey="tops" title="Tops">
-                <div className="clothing-options">
+                <div aria-label="tops tab" className="clothing-options">
                     <ClothingItem 
                         clothingType="short-sleeve" 
                         color="white" 
@@ -49,7 +49,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                 </div> 
             </Tab>
             <Tab eventKey="bottoms" title="Bottoms">
-            <div className="clothing-options">
+            <div aria-label="bottoms tab" className="clothing-options">
                     <ClothingItem 
                         clothingType="pants" 
                         color="white" 
@@ -80,7 +80,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                 </div> 
             </Tab>
             <Tab eventKey="outer" title="Outer">
-            <div className="clothing-options">
+            <div aria-label="outerwear tab" className="clothing-options">
                     <ClothingItem 
                         clothingType="hoodie" 
                         color="white" 
@@ -111,7 +111,7 @@ export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandl
                 </div> 
             </Tab>
             <Tab eventKey="shoes" title="Shoes">
-            <div className="clothing-options">
+            <div aria-label="shoes tab"  className="clothing-options">
                     <ClothingItem 
                         clothingType="sneakers" 
                         color="white" 
