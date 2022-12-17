@@ -98,8 +98,8 @@ public class EditClosetHandler implements Route {
      * @return
      */
     private boolean checkValidityColor(String name){
-        ArrayList<String> colorName = new ArrayList<>(Arrays.asList("black", "blue", "yellow",
-                "green", "orange", "purple", "indigo", "violet", "red"));
+        ArrayList<String> colorName = new ArrayList<>(Arrays.asList("white", "black", "blue",
+                "khaki", "red", "green", "yellow", "purple", "pink", "brown","grey"));
         if (colorName.contains(name)){
             return true;
         } return false;
