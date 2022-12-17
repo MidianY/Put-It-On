@@ -31,31 +31,48 @@ function getStatsClothingIcon(clothingType : string) {
 }
 
 function ClosetStats() {
-    let tops: number = 0;
-    let bottoms: number = 0;
-    let outers: number = 0;
-    let shoes: number = 0;
+    const [tops, setTops] = useState(0);
+    const [bottoms, setBottoms] = useState(0);
+    const [outers, setOuters] = useState(0);
+    const [shoes, setShoes] = useState(0);
+    const fetchClosetStats = async() => {
+        let stats = await fetch("http://localhost:3230/getClosetStats")
+        .then(response => response.json()).then(json => {return json})
+        .catch(error => console.log('error', error));
+        if (stats.result === "success") {
+            let closet = stats.closet;
+            setTops(closet.Tops)
+            setBottoms(closet.Bottoms)
+            setOuters(closet.Outer)
+            setShoes(closet.Shoes)
+        }
+    }
+
+    useEffect(() => {
+        fetchClosetStats();
+    }, [])
+
     return(
-        <div className="closet-stats">
+        <div className="closet-stats" aria-label="closet stats">
             In your closet, you have:
             <div className="tops-stat">
-                <div>
-                    <strong>{tops}</strong> Tops
+                <div aria-label={tops + " tops"}>
+                    <strong>{tops}</strong> {tops === 1 ? "Top" : "Tops"}
                 </div>
                 <div >
                     {getStatsClothingIcon("short-sleeve")}
                 </div>
             </div>
             <div className="bottoms-stat">
-                <div >
-                    <strong>{bottoms}</strong> Bottoms
+                <div aria-label={bottoms + " bottoms"}>
+                    <strong>{bottoms}</strong> {bottoms === 1 ? "Bottom" : "Bottoms"}
                 </div>
                 <div>
                     {getStatsClothingIcon("shorts")}
                 </div>
             </div>
-            <div className="outers-stat">
-                <div >
+            <div className="outers-stat" >
+                <div aria-label={outers + " outerwear"}>
                     <strong>{outers}</strong> Outerwear
                 </div>
                 <div>
@@ -63,8 +80,8 @@ function ClosetStats() {
                 </div>
             </div>
             <div className="shoes-stat">
-                <div >
-                    <strong>{shoes}</strong> Shoes
+                <div aria-label={shoes + " shoes"}>
+                    <strong>{shoes}</strong> {shoes === 1 ? "Pair of Shoes" : "Pairs of Shoes"}
                 </div>
                 <div>
                     {getStatsClothingIcon("sneakers")}
@@ -94,7 +111,7 @@ export default function Home() {
     const [weatherMap, setWeatherMap] = useState(new Map<string, string>());
     const [weatherLoaded, setWeatherLoaded] = useState(false);
     const [outfitButtonClicked, setOutfitButtonClicked] = useState(false);
-    const weatherAvailable: boolean = weatherLoaded || sessionStorage.getItem("weatherLoaded") == "true";
+    const weatherAvailable: boolean = weatherLoaded || sessionStorage.getItem("weatherLoaded") === "true";
     const chooseCity = (city: string) => {
         setChosenCity(city);
         getWeather(city);
