@@ -57,12 +57,12 @@ function CitiesAutocomplete({onSelect}: {onSelect: any}) {
     return(
         <div>
             <div>
-                <input type="text" value={value} placeholder={"Enter city name here"} onChange={handleSearch}/>
+                <input aria-label="enter city name here" type="text" value={value} placeholder={"Enter city name here"} onChange={handleSearch}/>
             </div>
             {searchCities.length > 0 && (
             <div className="citySearchOptions" onClick={handleCityClick}>
                 {searchCities.slice(0, 5).map((city, index) => {
-                    return <div className="citySearchOption">{city} </div>
+                    return <div aria-label={"city option: " + city} className="citySearchOption">{city} </div>
                 })}
             </div>
             )}

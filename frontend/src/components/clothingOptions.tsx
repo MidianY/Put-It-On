@@ -4,128 +4,131 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import ClothingItem from "./clothingItem";
 
-export default function ClothingOptions() {
+export default function ClothingOptions({pickColor}: {pickColor: MouseEventHandler}) {
     const [clickedItemIndex, setClickedItemIndex] = useState(0);
     return(
         <Tabs fill justify>
-            <Tab eventKey="shirts" title="Shirts">
+            <Tab eventKey="tops" title="Tops">
                 <div className="clothing-options">
                     <ClothingItem 
-                        clothingType="tShirt" 
+                        clothingType="short-sleeve" 
                         color="white" 
                         itemClicked={clickedItemIndex===0}
                         onSelect={() => setClickedItemIndex(0)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
-                        clothingType="longSleeveShirt" 
+                        clothingType="long-sleeve" 
                         color="white" 
                         itemClicked={clickedItemIndex===1}
                         onSelect={() => setClickedItemIndex(1)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
-                        clothingType="tankTop" 
+                        clothingType="tank" 
                         color="white" 
                         itemClicked={clickedItemIndex===2}
                         onSelect={() => setClickedItemIndex(2)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
-                        clothingType="longSleeveShirt" 
+                        clothingType="sweatshirt" 
                         color="white" 
                         itemClicked={clickedItemIndex===3}
                         onSelect={() => setClickedItemIndex(3)}
                         inCloset={false}
-                        />
-                    <ClothingItem 
-                        clothingType="tShirt" 
-                        color="white" 
-                        itemClicked={clickedItemIndex===4}
-                        onSelect={() => setClickedItemIndex(4)}
-                        inCloset={false}
-                        />
-                    <ClothingItem 
-                        clothingType="tankTop" 
-                        color="white" 
-                        itemClicked={clickedItemIndex===5}
-                        onSelect={() => setClickedItemIndex(5)}
-                        inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                 </div> 
             </Tab>
-            <Tab eventKey="pants" title="Pants">
+            <Tab eventKey="bottoms" title="Bottoms">
             <div className="clothing-options">
                     <ClothingItem 
-                        clothingType="tShirt" 
+                        clothingType="pants" 
                         color="white" 
                         itemClicked={clickedItemIndex===0}
                         onSelect={() => setClickedItemIndex(0)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
-                        clothingType="longSleeveShirt" 
+                        clothingType="shorts" 
                         color="white" 
                         itemClicked={clickedItemIndex===1}
                         onSelect={() => setClickedItemIndex(1)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
-                        clothingType="tankTop" 
+                        clothingType="skirt" 
                         color="white" 
                         itemClicked={clickedItemIndex===2}
                         onSelect={() => setClickedItemIndex(2)}
                         inCloset={false}
-                        />
-                </div> 
-            </Tab>
-            <Tab eventKey="shoes" title="Shoes">
-            <div className="clothing-options">
-                    <ClothingItem 
-                        clothingType="tShirt" 
-                        color="white" 
-                        itemClicked={clickedItemIndex===0}
-                        onSelect={() => setClickedItemIndex(0)}
-                        inCloset={false}
-                        />
-                    <ClothingItem 
-                        clothingType="longSleeveShirt" 
-                        color="white" 
-                        itemClicked={clickedItemIndex===1}
-                        onSelect={() => setClickedItemIndex(1)}
-                        inCloset={false}
-                        />
-                    <ClothingItem 
-                        clothingType="tankTop" 
-                        color="white" 
-                        itemClicked={clickedItemIndex===2}
-                        onSelect={() => setClickedItemIndex(2)}
-                        inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                 </div> 
             </Tab>
             <Tab eventKey="outer" title="Outer">
             <div className="clothing-options">
                     <ClothingItem 
-                        clothingType="tShirt" 
+                        clothingType="hoodie" 
                         color="white" 
                         itemClicked={clickedItemIndex===0}
                         onSelect={() => setClickedItemIndex(0)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
-                        clothingType="longSleeveShirt" 
+                        clothingType="jacket" 
                         color="white" 
                         itemClicked={clickedItemIndex===1}
                         onSelect={() => setClickedItemIndex(1)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                     <ClothingItem 
-                        clothingType="tShirt" 
+                        clothingType="coat" 
                         color="white" 
                         itemClicked={clickedItemIndex===2}
                         onSelect={() => setClickedItemIndex(2)}
                         inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
+                        />
+                </div> 
+            </Tab>
+            <Tab eventKey="shoes" title="Shoes">
+            <div className="clothing-options">
+                    <ClothingItem 
+                        clothingType="sneakers" 
+                        color="white" 
+                        itemClicked={clickedItemIndex===0}
+                        onSelect={() => setClickedItemIndex(0)}
+                        inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
+                        />
+                    <ClothingItem 
+                        clothingType="boots" 
+                        color="white" 
+                        itemClicked={clickedItemIndex===1}
+                        onSelect={() => setClickedItemIndex(1)}
+                        inCloset={false}
+                        pickColor={pickColor}
+                        recommended={[false, false]}
                         />
                 </div> 
             </Tab>

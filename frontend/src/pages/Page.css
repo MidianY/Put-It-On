@@ -10,3 +10,9 @@
   right: 20px; 
   bottom: 20px;
 }
+
+.outfit-button {
+  position: fixed;
+  bottom: 20px;
+  left: 650px;
+}
