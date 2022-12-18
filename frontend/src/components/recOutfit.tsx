@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './Components.css';
 import mockOutfit from '../mocks/mockOutfit.json';
 import ClothingItem from "./clothingItem";
@@ -6,9 +6,8 @@ import {BsQuestionCircleFill} from "react-icons/bs"
 import { OverlayTrigger } from "react-bootstrap";
 import { Tooltip } from "react-bootstrap";
 
-export default function RecommendedOutfit() {
-    const outfitResponse = mockOutfit;
-    const outfit  = outfitResponse.outfit;
+export default function RecommendedOutfit({outfit}: {outfit: any[]}) {
+    console.log(outfit)
     return(
         <div className="outfit">
         Recommended Outfit:
@@ -22,7 +21,7 @@ export default function RecommendedOutfit() {
             onSelect={() => null}
             inCloset={false}
             pickColor={() => null}
-            recommended={[true, item.inCloset]}/>
+            recommended={[true, item.inCloset === "true"]}/>
             </div>
             )
         })}
