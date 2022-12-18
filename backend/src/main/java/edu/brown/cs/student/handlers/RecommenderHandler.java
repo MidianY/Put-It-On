@@ -4,13 +4,13 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.closet.Closet;
 import edu.brown.cs.student.server.UserData;
+import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 import java.io.*;
 import java.util.*;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class RecommenderHandler implements Route {
 
@@ -26,111 +26,36 @@ public class RecommenderHandler implements Route {
     }
 
     @Override
-    public Object handle(Request request, Response response) throws IOException {
+    public Object handle(Request request, Response response) {
 
-        return new GetSuccessResponse(recommender(this.data)).serialize();
+        try {
+            return new GetSuccessResponse(recommender(this.data)).serialize();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return new GetFailureResponse().serialize();
+        }
 
     }
 
-    public List<HashMap<String,Object>> recommender(UserData data) throws IOException {
+    public List<HashMap<String,String>> recommender(UserData data) throws IOException {
 
-        ArrayList<String> validOuterTopNames = new ArrayList<>(Arrays.asList("jacket", "coat"));
-        ArrayList<String> validInnerTopNames = new ArrayList<>(Arrays.asList("top", "hoodie", "shirt", "long-sleeve", "short-sleeve", "sweater", "tank"));
-        ArrayList<String> validBottomNames = new ArrayList<>(Arrays.asList("jeans", "pants", "sweats", "shorts", "skirt"));
-        ArrayList<String> validShoeNames = new ArrayList<>(Arrays.asList("shoes", "sneakers", "boots"));
+        ArrayList<String> validOuterTopNames = new ArrayList<>(Arrays.asList("jacket", "coat", "hoodie"));
+        ArrayList<String> validInnerTopNames = new ArrayList<>(Arrays.asList("long-sleeve", "short-sleeve", "sweatshirt", "tank"));
+        ArrayList<String> validBottomNames = new ArrayList<>(Arrays.asList("pants", "shorts", "skirt"));
+        ArrayList<String> validShoeNames = new ArrayList<>(Arrays.asList("sneakers", "boots"));
 
         List<List<String>> pieces = validatePieces(data,validOuterTopNames,validInnerTopNames,validBottomNames,validShoeNames);
-
-//        System.out.println(pieces);
-
         ArrayList<List<HashMap<String,String>>> presentCloset = checkCloset(data, pieces.get(0), pieces.get(1), pieces.get(2), pieces.get(3));
-        List<HashMap<String, Object>> outfitList = new ArrayList<>();
 
-        returnProperCloset(presentCloset,rankColors(presentCloset,colorCheck(getValidColors(),choseColors(presentCloset).get("colors"))));
-        validItem(presentCloset,colorCheck(getValidColors(),choseColors(presentCloset).get("colors")),rankColors(presentCloset,colorCheck(getValidColors(),choseColors(presentCloset).get("colors"))));
-        HashMap<String, ArrayList<HashMap<String, String>>> desiredFit = checkColor(presentCloset, getColors(data));
+        List<String> outfit = choseColors(presentCloset);
+        List<HashMap<String, Integer>> checkedColor = colorCheck(getValidColors(),outfit);
+        HashMap<String, List> colorsRanked = rankColors(presentCloset,checkedColor);
+        returnProperCloset(presentCloset,colorsRanked);
+        validItem(presentCloset,checkedColor,colorsRanked);
+        HashMap<String, ArrayList<HashMap<String, String>>> desiredFit = checkColor(presentCloset);
 
-
-        if(desiredFit.get("outfit").size() == 3){
-
-            String innerTop = desiredFit.get("outfit").get(0).get("item");
-            String bottom = desiredFit.get("outfit").get(1).get("item");
-            String footWear = desiredFit.get("outfit").get(2).get("item");
-
-            String innerTopColor = desiredFit.get("outfit").get(0).get("color");
-            String bottomColor = desiredFit.get("outfit").get(1).get("color");
-            String footWearColor = desiredFit.get("outfit").get(2).get("color");
-
-            String innerTopInCloset = desiredFit.get("outfit").get(0).get("inCloset");
-            String bottomInCloset = desiredFit.get("outfit").get(1).get("inCloset");
-            String footWearInCloset = desiredFit.get("outfit").get(2).get("inCloset");
-
-
-            HashMap<String, Object> innerTopMap = new HashMap();
-            innerTopMap.put("item", innerTop);
-            innerTopMap.put("color", innerTopColor);
-            innerTopMap.put("inCloset", innerTopInCloset);
-
-            HashMap<String, Object> bottomMap = new HashMap();
-            bottomMap.put("item", bottom);
-            bottomMap.put("color", bottomColor);
-            bottomMap.put("inCloset", bottomInCloset);
-
-            HashMap<String, Object> footwearMap = new HashMap();
-            footwearMap.put("item", footWear);
-            footwearMap.put("color", footWearColor);
-            footwearMap.put("inCloset", footWearInCloset);
-
-            outfitList.add(innerTopMap);
-            outfitList.add(bottomMap);
-            outfitList.add(footwearMap);
-        }
-
-        else{
-
-            String outerTop = desiredFit.get("outfit").get(0).get("item");
-            String innerTop = desiredFit.get("outfit").get(1).get("item");
-            String bottom = desiredFit.get("outfit").get(2).get("item");
-            String footWear = desiredFit.get("outfit").get(3).get("item");
-
-            String outerTopColor = desiredFit.get("outfit").get(0).get("color");
-            String innerTopColor = desiredFit.get("outfit").get(1).get("color");
-            String bottomColor = desiredFit.get("outfit").get(2).get("color");
-            String footWearColor = desiredFit.get("outfit").get(3).get("color");
-
-            String outerWayInCloset = desiredFit.get("outfit").get(0).get("inCloset");
-            String innerTopInCloset = desiredFit.get("outfit").get(1).get("inCloset");
-            String bottomInCloset = desiredFit.get("outfit").get(2).get("inCloset");
-            String footWearInCloset = desiredFit.get("outfit").get(3).get("inCloset");
-
-            HashMap<String, Object> outerTopMap = new HashMap();
-            outerTopMap.put("item", outerTop);
-            outerTopMap.put("color", outerTopColor);
-            outerTopMap.put("inCloset", outerWayInCloset);
-
-            HashMap<String, Object> innerTopMap = new HashMap();
-            innerTopMap.put("item", innerTop);
-            innerTopMap.put("color", innerTopColor);
-            innerTopMap.put("inCloset", innerTopInCloset);
-
-            HashMap<String, Object> bottomMap = new HashMap();
-            bottomMap.put("item", bottom);
-            bottomMap.put("color", bottomColor);
-            bottomMap.put("inCloset", bottomInCloset);
-
-            HashMap<String, Object> footwearMap = new HashMap();
-            footwearMap.put("item", footWear);
-            footwearMap.put("color", footWearColor);
-            footwearMap.put("inCloset", footWearInCloset);
-
-            outfitList.add(outerTopMap);
-            outfitList.add(innerTopMap);
-            outfitList.add(bottomMap);
-            outfitList.add(footwearMap);
-
-        }
-
-        return outfitList;
+        return desiredFit.get("outfit");
     }
 
     public Boolean precipitationCheck(UserData data) throws IOException {
@@ -146,20 +71,8 @@ public class RecommenderHandler implements Route {
         }
     }
 
-    public List<String> getColors(UserData data){
-
-        List<String> colors = new ArrayList<>();
-        Closet closetReport = data.getCurrentCloset();
-        List<Map<String, String>> closet = closetReport.getClothesData();
-
-        for (Map<String, String> item : closet){
-            colors.add(item.get("color"));
-        }
-        return colors;
-    }
-
     public List<List<String>> validatePieces(UserData data, ArrayList<String> validOuterTopNames,
-                                             ArrayList<String> validInnerTopNames, ArrayList<String> validBottomNames, ArrayList<String> validShoeNames) throws IOException {
+        ArrayList<String> validInnerTopNames, ArrayList<String> validBottomNames, ArrayList<String> validShoeNames) throws IOException {
 
         String weatherReport = data.getLocationData();
         WeatherReport forecast = this.fromWeatherJson(weatherReport);
@@ -169,35 +82,35 @@ public class RecommenderHandler implements Route {
         if (forecast.feelsLike() >= 70) {
             if(precipitationCheck(data)){
                 validOuterTopNames.remove("coat");
-                validShoeNames.remove("shoes");
                 validShoeNames.remove("sneakers");
+                validBottomNames.remove("shorts");
+                validBottomNames.remove("skirt");
             }
             else{
                 validOuterTopNames.remove("jacket");
                 validOuterTopNames.remove("coat");
-                validInnerTopNames.remove("hoodie");
-                validInnerTopNames.remove("sweater");
+                validOuterTopNames.remove("hoodie");
+                validInnerTopNames.remove("sweatshirt");
                 validShoeNames.remove("boots");
             }
         } else if (forecast.feelsLike() >= 60 && forecast.feelsLike() < 70) {
             if(precipitationCheck(data)){
                 validOuterTopNames.remove("coat");
-                validShoeNames.remove("shoes");
                 validShoeNames.remove("sneakers");
+                validBottomNames.remove("shorts");
+                validBottomNames.remove("skirt");
             }
             else{
                 validOuterTopNames.remove("jacket");
                 validOuterTopNames.remove("coat");
-                validInnerTopNames.remove("hoodie");
-                validInnerTopNames.remove("sweater");
                 validShoeNames.remove("boots");
             }
         } else if (forecast.feelsLike() >= 40 && forecast.feelsLike() < 60) {
             if(precipitationCheck(data)){
                 validInnerTopNames.remove("tank");
+                validInnerTopNames.remove("short-sleeve");
                 validBottomNames.remove("shorts");
                 validBottomNames.remove("skirt");
-                validShoeNames.remove("shoes");
                 validShoeNames.remove("sneakers");
             }
             else{
@@ -208,33 +121,28 @@ public class RecommenderHandler implements Route {
             }
         } else if (forecast.feelsLike() >= 33 && forecast.feelsLike() < 40) {
             if(precipitationCheck(data)){
+                validOuterTopNames.remove("hoodie");
                 validInnerTopNames.remove("tank");
+                validInnerTopNames.remove("short-sleeve");
                 validBottomNames.remove("shorts");
                 validBottomNames.remove("skirt");
-                validShoeNames.remove("shoes");
                 validShoeNames.remove("sneakers");
             }
             else{
+                validOuterTopNames.remove("hoodie");
                 validInnerTopNames.remove("tank");
+                validInnerTopNames.remove("short-sleeve");
                 validBottomNames.remove("shorts");
                 validBottomNames.remove("skirt");
-                validShoeNames.remove("boots");
             }
         } else {
-            if(precipitationCheck(data)){
-                validInnerTopNames.remove("tank");
-                validBottomNames.remove("shorts");
-                validBottomNames.remove("skirt");
-                validBottomNames.remove("shoes");
-                validBottomNames.remove("sneakers");
-            }
-            else{
-                validInnerTopNames.remove("tank");
-                validBottomNames.remove("shorts");
-                validBottomNames.remove("skirt");
-                validShoeNames.remove("shoes");
-                validShoeNames.remove("sneakers");
-            }
+            validOuterTopNames.remove("hoodie");
+            validOuterTopNames.remove("jacket");
+            validInnerTopNames.remove("tank");
+            validInnerTopNames.remove("short-sleeve");
+            validBottomNames.remove("shorts");
+            validBottomNames.remove("skirt");
+            validShoeNames.remove("sneakers");
         }
 
         pieces.add(validOuterTopNames);
@@ -246,7 +154,7 @@ public class RecommenderHandler implements Route {
     }
 
     public ArrayList<List<HashMap<String,String>>> checkCloset(UserData data, List<String> validOuterTopNames,
-                                                               List<String> validInnerTopNames, List<String> validBottomNames, List<String> validShoeNames){
+        List<String> validInnerTopNames, List<String> validBottomNames, List<String> validShoeNames){
 
         List<List<String>> availableClothing = new ArrayList<>();
         availableClothing.add(validOuterTopNames);
@@ -255,116 +163,198 @@ public class RecommenderHandler implements Route {
         availableClothing.add(validShoeNames);
 
         HashMap<String,String> outerTop;
+        Map<String,String> outerTop2 = new HashMap<>();
         ArrayList<HashMap<String,String>> outerTopList = new ArrayList<>();
         HashMap<String,String> innerTop;
+        Map<String,String> innerTop2 = new HashMap<>();
         ArrayList<HashMap<String,String>> innerTopList = new ArrayList<>();
         HashMap<String,String> bottom;
+        Map<String,String> bottom2 = new HashMap<>();
         ArrayList<HashMap<String,String>> bottomList = new ArrayList<>();
         HashMap<String,String> footwear;
+        Map<String,String> footwear2 = new HashMap<>();
         ArrayList<HashMap<String,String>> footWearList = new ArrayList<>();
         ArrayList<List<HashMap<String,String>>> list = new ArrayList<>();
 
         Closet closetReport = data.getCurrentCloset();
         List<Map<String, String>> closet = closetReport.getClothesData();
 
-        Boolean outerTracker = false;
+        if (closet.isEmpty()){
 
-        for (int i = 0; i < availableClothing.size(); i++){
-
-            String outerWear = null;
-            String innerWear = null;
-            String bottomWear = null;
-            String footWear = null;
-
-            if (availableClothing.get(0).size() == 0){
-                outerTracker = true;
-                outerTop = new HashMap<>();
-                outerTop.put("item", "outerTop");
-                outerTop.put("color", "brown");
-                outerTop.put("inCloset","false");
-                outerTopList.add(outerTop);
+            if(validOuterTopNames.size() != 0) {
+                outerTop2.put("item", validOuterTopNames.get(new Random().nextInt(validOuterTopNames.size())));
+                outerTop2.put("color", getColors().get(new Random().nextInt(getColors().size())));
+                outerTop2.put("inCloset", "false");
             }
 
-            for (Map<String, String> item : closet){
+            innerTop2.put("item", validInnerTopNames.get(new Random().nextInt(validInnerTopNames.size())));
+            innerTop2.put("color", getColors().get(new Random().nextInt(getColors().size())));
+            innerTop2.put("inCloset", "false");
 
-                if (validOuterTopNames.contains(item.get("item"))){
+            bottom2.put("item", validBottomNames.get(new Random().nextInt(validBottomNames.size())));
+            bottom2.put("color", getColors().get(new Random().nextInt(getColors().size())));
+            bottom2.put("inCloset", "false");
+
+            footwear2.put("item", validShoeNames.get(new Random().nextInt(validShoeNames.size())));
+            footwear2.put("color", getColors().get(new Random().nextInt(getColors().size())));
+            footwear2.put("inCloset", "false");
+
+            closet.add(outerTop2);
+            closet.add(innerTop2);
+            closet.add(bottom2);
+            closet.add(footwear2);
+
+        }
+
+        for (int i = 0; i < availableClothing.size(); i++) {
+
+            Boolean outerTracker = false;
+
+            for (Map<String, String> item : closet) {
+
+                if (availableClothing.get(0).size() == 0) {
+                    outerTracker = true;
+                    outerTop = new HashMap<>();
+                    outerTop.put("item", "outerTop");
+                    outerTop.put("color", getColors().get(new Random().nextInt(getColors().size())));
+                    outerTop.put("inCloset", "false");
+                    outerTopList.add(outerTop);
+                    checkList(outerTopList);
+
+                }
+
+                if (validOuterTopNames.contains(item.get("item"))) {
                     outerTop = new HashMap<>();
                     outerTop.put("item", item.get("item"));
                     outerTop.put("color", item.get("color"));
-                    outerTop.put("inCloset","true");
+                    outerTop.put("inCloset", "true");
                     outerTopList.add(outerTop);
+                    checkList(outerTopList);
                 }
-                else if (validInnerTopNames.contains(item.get("item"))){
+
+                if (validInnerTopNames.contains(item.get("item"))) {
                     innerTop = new HashMap<>();
                     innerTop.put("item", item.get("item"));
                     innerTop.put("color", item.get("color"));
-                    innerTop.put("inCloset","true");
+                    innerTop.put("inCloset", "true");
                     innerTopList.add(innerTop);
+                    checkList(innerTopList);
                 }
-                else if (validBottomNames.contains(item.get("item"))){
+
+                if (validBottomNames.contains(item.get("item"))) {
                     bottom = new HashMap<>();
                     bottom.put("item", item.get("item"));
                     bottom.put("color", item.get("color"));
-                    bottom.put("inCloset","true");
+                    bottom.put("inCloset", "true");
                     bottomList.add(bottom);
+                    checkList(bottomList);
                 }
-                else if (validShoeNames.contains(item.get("item"))){
+
+                if (validShoeNames.contains(item.get("item"))) {
                     footwear = new HashMap<>();
                     footwear.put("item", item.get("item"));
                     footwear.put("color", item.get("color"));
-                    footwear.put("inCloset","true");
+                    footwear.put("inCloset", "true");
                     footWearList.add(footwear);
+                    checkList(footWearList);
+
+                }
+                if (i == 0 && availableClothing.get(0).size() != 0) {
+                    outerTop = new HashMap<>();
+                    outerTop.put("item", validOuterTopNames.get(new Random().nextInt(validOuterTopNames.size())));
+                    outerTop.put("color", "black");
+                    outerTop.put("inCloset", "false");
+                    outerTopList.add(outerTop);
+                    checkList(outerTopList);
+                } else if (i == 1) {
+                    innerTop = new HashMap<>();
+                    innerTop.put("item", validInnerTopNames.get(new Random().nextInt(validInnerTopNames.size())));
+                    innerTop.put("color", getColors().get(new Random().nextInt(getColors().size())));
+                    innerTop.put("inCloset", "false");
+                    innerTopList.add(innerTop);
+                    checkList(innerTopList);
+                } else if (i == 2) {
+                    bottom = new HashMap<>();
+                    bottom.put("item", validBottomNames.get(new Random().nextInt(validBottomNames.size())));
+                    bottom.put("color", getColors().get(new Random().nextInt(getColors().size())));
+                    bottom.put("inCloset", "false");
+                    bottomList.add(bottom);
+                    checkList(bottomList);
+                } else if (i == 3) {
+                    footwear = new HashMap<>();
+                    footwear.put("item", validShoeNames.get(new Random().nextInt(validShoeNames.size())));
+                    if(footwear.get("item").equals("sneakers")){
+                        footwear.put("color", "white");
+                    }
+                    else{
+                        footwear.put("color", "brown");
+                    }
+                    footwear.put("inCloset", "false");
+                    footWearList.add(footwear);
+                    checkList(footWearList);
                 }
             }
 
-            if (i == 0 && availableClothing.get(0).size() != 0){
-                outerTop = new HashMap<>();
-                outerTop.put("item", validOuterTopNames.get(new Random().nextInt(validOuterTopNames.size())));
-                outerTop.put("color", "white");
-                outerTop.put("inCloset","false");
-                outerTopList.add(outerTop);
+            if (!outerTracker) {
+                list.add(outerTopList);
             }
-            else if(i == 1){
-                innerTop = new HashMap<>();
-                innerTop.put("item", validInnerTopNames.get(new Random().nextInt(validInnerTopNames.size())));
-                innerTop.put("color", "white");
-                innerTop.put("inCloset","false");
-                innerTopList.add(innerTop);
-            }
-            else if(i == 2){
-                bottom = new HashMap<>();
-                bottom.put("item", validBottomNames.get(new Random().nextInt(validBottomNames.size())));
-                bottom.put("color", "black");
-                bottom.put("inCloset","false");
-                bottomList.add(bottom);
-            }
-            else if (i == 3){
-                footwear = new HashMap<>();
-                footwear.put("item", validShoeNames.get(new Random().nextInt(validShoeNames.size())));
-                footwear.put("color", "white");
-                footwear.put("inCloset","false");
-                footWearList.add(footwear);
-            }
-        }
-
-
-
-        if(outerTracker){
             list.add(innerTopList);
             list.add(bottomList);
             list.add(footWearList);
+            checkArray(list);
         }
-        else{
-            list.add(outerTopList);
-            list.add(innerTopList);
-            list.add(bottomList);
-            list.add(footWearList);
-        }
-
         return list;
     }
 
-    public HashMap<String,ArrayList<HashMap<String,String>>> checkColor(ArrayList<List<HashMap<String,String>>> filteredCloset, List<String> outfitColors){
+    public void checkList(ArrayList<HashMap<String, String>> pieceList){
+
+        String item;
+        String color;
+        String inCloset;
+
+        for (int i = 0; i < pieceList.size(); i++) {
+            item = pieceList.get(i).get("item");
+            color = pieceList.get(i).get("color");
+            inCloset = pieceList.get(i).get("inCloset");
+
+            int tracker = 0;
+
+            for (int j = 0; j < pieceList.size(); j++){
+                if (pieceList.get(j).get("item").equals(item) && pieceList.get(j).get("color").equals(color) && !pieceList.get(j).get("color").equals("null") && pieceList.get(j).get("inCloset").equals(inCloset)){
+                    tracker++;
+                    if(tracker > 1) {
+                        pieceList.remove(i);
+                    }
+                }
+            }
+            if(pieceList.size() > 1){
+                if(inCloset.equals("false")){
+                    pieceList.remove(i);
+                }
+            }
+        }
+    }
+
+    public ArrayList<List<HashMap<String, String>>> checkArray(ArrayList<List<HashMap<String, String>>> list){
+
+        for (int i = 0; i < list.size(); i++) {
+            List<HashMap<String, String>> currentIndex = list.get(i);
+
+            int tracker = 0;
+
+            for (int j = 0; j < list.size(); j++){
+                if (list.get(j).equals(currentIndex)){
+                    tracker++;
+                    if(tracker > 1){
+                        list.remove(i);
+                    }
+                }
+            }
+        }
+        return list;
+    }
+
+    public HashMap<String,ArrayList<HashMap<String,String>>> checkColor(ArrayList<List<HashMap<String,String>>> filteredCloset){
 
         HashMap<String,String> outerTop;
 
@@ -374,46 +364,102 @@ public class RecommenderHandler implements Route {
 
         HashMap<String,String> footwear;
 
-        ArrayList<HashMap<String,String>> list = new ArrayList<>();
-
         HashMap<String,ArrayList<HashMap<String,String>>> outfit = new HashMap<>();
 
+        ArrayList<HashMap<String,String>> list = new ArrayList<>();
+
+        checkArray(filteredCloset);
+
         for (int i = 0; i < filteredCloset.size(); i++) {
+            if(filteredCloset.get(i).size() >= 2){
+                getFinalPiece(filteredCloset.get(i));
+            }
+
             for (int j = 0; j < filteredCloset.get(i).size(); j++) {
 
-                if (i == 0) {
-                    outerTop = new HashMap<>();
-                    outerTop.put("item", filteredCloset.get(i).get(j).get("item"));
-                    outerTop.put("color", filteredCloset.get(i).get(j).get("color"));
-                    outerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
-                    list.add(outerTop);
+                if (filteredCloset.size() == 3) {
+                    if (i == 0) {
+                        innerTop = new HashMap<>();
+                        innerTop.put("item", filteredCloset.get(i).get(j).get("item"));
+                        innerTop.put("color", filteredCloset.get(i).get(j).get("color"));
+                        innerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
+                        list.add(innerTop);
 
-                } else if (i == 1) {
-                    innerTop = new HashMap<>();
-                    innerTop.put("item", filteredCloset.get(i).get(j).get("item"));
-                    innerTop.put("color", filteredCloset.get(i).get(j).get("color"));
-                    innerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
-                    list.add(innerTop);
+                    } else if (i == 1) {
+                        bottom = new HashMap<>();
+                        bottom.put("item", filteredCloset.get(i).get(j).get("item"));
+                        bottom.put("color", filteredCloset.get(i).get(j).get("color"));
+                        bottom.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
+                        list.add(bottom);
 
-                } else if (i == 2) {
-                    bottom = new HashMap<>();
-                    bottom.put("item", filteredCloset.get(i).get(j).get("item"));
-                    bottom.put("color", filteredCloset.get(i).get(j).get("color"));
-                    bottom.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
-                    list.add(bottom);
+                    } else {
+                        footwear = new HashMap<>();
+                        footwear.put("item", filteredCloset.get(i).get(j).get("item"));
+                        footwear.put("color", filteredCloset.get(i).get(j).get("color"));
+                        footwear.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
+                        list.add(footwear);
+                    }
 
-                } else if (i == 3) {
-                    footwear = new HashMap<>();
-                    footwear.put("item", filteredCloset.get(i).get(j).get("item"));
-                    footwear.put("color", filteredCloset.get(i).get(j).get("color"));
-                    footwear.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
-                    list.add(footwear);
+                } else {
+
+                    if (i == 0) {
+                        outerTop = new HashMap<>();
+                        outerTop.put("item", filteredCloset.get(i).get(j).get("item"));
+                        outerTop.put("color", filteredCloset.get(i).get(j).get("color"));
+                        outerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
+                        list.add(outerTop);
+
+                    } else if (i == 1) {
+                        innerTop = new HashMap<>();
+                        innerTop.put("item", filteredCloset.get(i).get(j).get("item"));
+                        innerTop.put("color", filteredCloset.get(i).get(j).get("color"));
+                        innerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
+                        list.add(innerTop);
+
+                    } else if (i == 2) {
+                        bottom = new HashMap<>();
+                        bottom.put("item", filteredCloset.get(i).get(j).get("item"));
+                        bottom.put("color", filteredCloset.get(i).get(j).get("color"));
+                        bottom.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
+                        list.add(bottom);
+
+                    } else if (i == 3) {
+                        footwear = new HashMap<>();
+                        footwear.put("item", filteredCloset.get(i).get(j).get("item"));
+                        footwear.put("color", filteredCloset.get(i).get(j).get("color"));
+                        footwear.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
+                        list.add(footwear);
+                    }
                 }
             }
         }
+
         outfit.put("outfit", list);
 
         return outfit;
+    }
+
+    public void getFinalPiece(List<HashMap<String, String>> list){
+
+        for(int i = 0; i < list.size(); i++){
+
+            Boolean inCloset = false;
+
+            for(HashMap<String, String> piece : list) {
+                if (piece.get("inCloset").equals("true")) {
+                    inCloset = true;
+                }
+            }
+
+            if(!inCloset){
+                list.remove(new Random().nextInt(list.size()));
+            }
+            else{
+                if(list.get(i).get("inCloset").equals("false")){
+                    list.remove(i);
+                }
+            }
+        }
     }
 
     public List<HashMap<String,List<String>>> getValidColors(){
@@ -431,7 +477,7 @@ public class RecommenderHandler implements Route {
         validColors.add(black);
 
         HashMap<String, List<String>> blue = new HashMap<>();
-        List<String> matchesBlue = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "green", "yellow", "orange", "brown", "grey"));
+        List<String> matchesBlue = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "green", "orange", "grey"));
         blue.put("blue", matchesBlue);
         validColors.add(blue);
 
@@ -441,7 +487,7 @@ public class RecommenderHandler implements Route {
         validColors.add(khaki);
 
         HashMap<String, List<String>> red = new HashMap<>();
-        List<String> matchesRed = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "yellow", "purple", "pink", "orange", "brown", "grey"));
+        List<String> matchesRed = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "pink", "orange", "brown", "grey"));
         red.put("red", matchesRed);
         validColors.add(red);
 
@@ -451,12 +497,12 @@ public class RecommenderHandler implements Route {
         validColors.add(green);
 
         HashMap<String, List<String>> yellow = new HashMap<>();
-        List<String> matchesYellow = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "yellow", "orange", "brown", "grey"));
+        List<String> matchesYellow = new ArrayList<>(Arrays.asList("white", "black", "khaki", "yellow", "purple", "orange", "brown", "grey"));
         yellow.put("yellow", matchesYellow);
         validColors.add(yellow);
 
         HashMap<String, List<String>> purple = new HashMap<>();
-        List<String> matchesPurple = new ArrayList<>(Arrays.asList("white", "black", "khaki", "red", "green", "purple", "pink", "grey"));
+        List<String> matchesPurple = new ArrayList<>(Arrays.asList("white", "black", "khaki", "green", "yellow", "purple", "pink", "grey"));
         purple.put("purple", matchesPurple);
         validColors.add(purple);
 
@@ -466,12 +512,12 @@ public class RecommenderHandler implements Route {
         validColors.add(pink);
 
         HashMap<String, List<String>> orange = new HashMap<>();
-        List<String> matchesOrange = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "green", "orange", "brown", "grey", "yellow"));
+        List<String> matchesOrange = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "green", "yellow", "orange", "brown", "grey"));
         orange.put("orange", matchesOrange);
         validColors.add(orange);
 
         HashMap<String, List<String>> brown = new HashMap<>();
-        List<String> matchesBrown = new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "yellow", "pink", "orange", "brown", "grey"));
+        List<String> matchesBrown = new ArrayList<>(Arrays.asList("white", "black", "khaki", "red", "yellow", "pink", "orange", "brown", "grey"));
         brown.put("brown", matchesBrown);
         validColors.add(brown);
 
@@ -483,8 +529,11 @@ public class RecommenderHandler implements Route {
         return validColors;
     }
 
-    public List<HashMap<String, Integer>> colorCheck(List<HashMap<String,List<String>>> validColors, List<String> outfit) {
+    public List<String> getColors(){
+        return new ArrayList<>(Arrays.asList("white", "black", "blue", "khaki", "red", "green", "yellow", "purple", "pink", "orange", "brown", "grey"));
+    }
 
+    public List<HashMap<String, Integer>> colorCheck(List<HashMap<String,List<String>>> validColors, List<String> outfit) {
 
         HashMap<String, Integer> countTracker;
         List<HashMap<String, Integer>> counterTrackerList = new ArrayList<>();
@@ -493,49 +542,50 @@ public class RecommenderHandler implements Route {
         List<List> response = new ArrayList<>();
 
         for (HashMap<String, List<String>> vc : validColors) {
-            for (int i = 0; i < outfit.size(); i++) {
-                if (vc.get(outfit.get(i)) != null) {
-                    test.add(vc.get(outfit.get(i)));
+            for (String s : outfit) {
+                if (vc.get(s) != null) {
+                    test.add(vc.get(s));
                 }
             }
         }
 
-        for (String c : outfit){
+        for (String c : outfit) {
             int wordTrack = 0;
-            for (int i = 0; i < test.size(); i ++){
-                if (test.get(i).contains(c)){
+            for (int i = 0; i < test.size(); i++) {
+                if (test.get(i).contains(c)) {
                     wordTrack++;
                 }
+                countTracker = new HashMap<>();
+                countTracker.put(c, wordTrack);
+                counterTrackerList.add(countTracker);
+                trial.add(wordTrack);
             }
-            countTracker = new HashMap<>();
-            countTracker.put(c,wordTrack);
-            counterTrackerList.add(countTracker);
-            trial.add(wordTrack);
         }
 
         Set<Integer> sortedSet = new TreeSet<>(Comparator.reverseOrder());
         sortedSet.addAll(trial);
+        List<Integer> top4 = sortedSet.stream().limit(4).toList();
 
-        response.add(trial);
+        response.add(top4);
         response.add(counterTrackerList);
 
         return counterTrackerList;
 
     }
 
-    public HashMap<String, List> choseColors(ArrayList<List<HashMap<String,String>>> filteredCloset){
+    public List<String> choseColors(ArrayList<List<HashMap<String,String>>> filteredCloset){
         List<String> availableColors = new ArrayList<>();
-        HashMap<String,List> availableColorsMap = new HashMap<>();
-        String color = null;
-        for (int i = 0; i < filteredCloset.size(); i ++){
-            for (int j = 0; j < filteredCloset.get(i).size(); j ++){
-                color = filteredCloset.get(i).get(j).get("color");
+        String color;
+
+        checkArray(filteredCloset);
+
+        for (List<HashMap<String, String>> hashMaps : filteredCloset) {
+            for (HashMap<String, String> hashMap : hashMaps) {
+                color = hashMap.get("color");
                 availableColors.add(color);
             }
-            availableColorsMap = new HashMap<>();
-            availableColorsMap.put("colors", availableColors);
         }
-        return availableColorsMap;
+        return filterColors(availableColors);
     }
 
     public HashMap<String,List> rankColors(ArrayList<List<HashMap<String,String>>> filteredCloset, List<HashMap<String, Integer>> rankMap) {
@@ -545,23 +595,41 @@ public class RecommenderHandler implements Route {
         List<Integer> colorValuePair;
         HashMap<String,List> response = new HashMap<>();
 
-        for (int i = 0; i < filteredCloset.size(); i++) {
+        checkArray(filteredCloset);
 
-            String currentColor = null;
+        for (List<HashMap<String, String>> clothingPiece : filteredCloset) {
+
+            String currentColor;
             colorValuePair = new ArrayList<>();
 
-            for (int j = 0; j < filteredCloset.get(i).size(); j++) {
-                currentColor = filteredCloset.get(i).get(j).get("color");
-                colorValuePair.add(returnColorScore(rankMap,currentColor));
+            for (HashMap<String, String> piece : clothingPiece) {
+                currentColor = piece.get("color");
+                colorValuePair.add(returnColorScore(rankMap, currentColor));
                 orderedColorsPresentInCloset.add(currentColor);
             }
             listOfColorValuePairs.add(colorValuePair);
         }
 
         response.put("values", listOfColorValuePairs);
-        response.put("order", orderedColorsPresentInCloset);
+        response.put("order", filterColors(orderedColorsPresentInCloset));
 
         return response;
+    }
+
+    public List<String> filterColors(List<String> list){
+
+        for(String color : list){
+            int colorTracker = 0;
+            for(String c : getColors()){
+                if(c.equals(color)){
+                    colorTracker++;
+                }
+            }
+            if(colorTracker >=2){
+                list.remove(color);
+            }
+        }
+        return list;
     }
 
     public Integer returnColorScore(List<HashMap<String, Integer>> rankMap, String color){
@@ -580,11 +648,15 @@ public class RecommenderHandler implements Route {
         List<String> orderedColorsPresentInCloset = response.get("order");
         List<List<Integer>> listOfColorValuePairs = response.get("values");
 
+        checkArray(filteredCloset);
+
         for (int i = 0; i < filteredCloset.size(); i++) {
             String currentColor;
-            Integer currentValue = 0;
+            String inCloset;
+            Integer currentValue;
             for (int j = 0; j < filteredCloset.get(i).size(); j++) {
                 currentColor = filteredCloset.get(i).get(j).get("color");
+                inCloset = filteredCloset.get(i).get(j).get("inCloset");
                 currentValue = listOfColorValuePairs.get(i).get(j);
                 if (orderedColorsPresentInCloset.contains(currentColor)){
                     Set<Integer> sortedSet = new TreeSet<>(Comparator.reverseOrder());
@@ -603,33 +675,35 @@ public class RecommenderHandler implements Route {
 
         List<String> orderedColorsPresentInCloset = response.get("order");
 
+        checkArray(filteredCloset);
+
         for(HashMap<String,Integer> ctl : counterTrackerList){
-            for (int i = 0; i < filteredCloset.size(); i++) {
+            for (List<HashMap<String, String>> hashMaps : filteredCloset) {
                 Boolean bigList = false;
                 int randomInteger = 0;
-                String inCloset = null;
-                for (int j = 0; j < filteredCloset.get(i).size(); j++) {
-                    inCloset = filteredCloset.get(i).get(j).get("inCloset");
-                    String item = filteredCloset.get(i).get(j).get("item");
-                    if(ctl.get(filteredCloset.get(i).get(j).get("color")) != null) {
-                        if (!(ctl.containsKey(filteredCloset.get(i).get(j).get("color")))) {
-                            filteredCloset.get(i).remove(j);
+                String inCloset;
+                for (int j = 0; j < hashMaps.size(); j++) {
+                    inCloset = hashMaps.get(j).get("inCloset");
+                    String item = hashMaps.get(j).get("item");
+                    if (ctl.get(hashMaps.get(j).get("color")) != null) {
+                        if (!(ctl.containsKey(hashMaps.get(j).get("color")))) {
+                            hashMaps.remove(j);
                         }
-                        if (filteredCloset.get(i).size() == 0) {
+                        if (hashMaps.size() == 0) {
                             randomInteger = new Random().nextInt(orderedColorsPresentInCloset.size());
                             String color = orderedColorsPresentInCloset.get(randomInteger);
-                            filteredCloset.get(i).get(j).put("item", item);
-                            filteredCloset.get(i).get(j).put("color", color);
-                            filteredCloset.get(i).get(j).put("inCloset",inCloset);
+                            hashMaps.get(j).put("item", item);
+                            hashMaps.get(j).put("color", color);
+                            hashMaps.get(j).put("inCloset", inCloset);
                         }
-                        if (filteredCloset.get(i).size() > 1) {
+                        if (hashMaps.size() > 1) {
                             bigList = true;
-                            randomInteger = new Random().nextInt(filteredCloset.get(i).size());
+                            randomInteger = new Random().nextInt(hashMaps.size());
                         }
                     }
                 }
                 if (bigList.equals(true)) {
-                    filteredCloset.get(i).remove(randomInteger);
+                    hashMaps.remove(randomInteger);
                 }
             }
         }
@@ -637,7 +711,14 @@ public class RecommenderHandler implements Route {
         return filteredCloset;
     }
 
-    public record GetSuccessResponse(List<HashMap<String,Object>> data) {
+    public WeatherReport fromWeatherJson(String jsonList) throws IOException {
+        return this.weatherReportJsonAdapter.fromJson(jsonList);
+    }
+
+    public record WeatherReport(Float temp, Float feelsLike, String descr, String icon, Float rain, Float snow){
+    }
+
+    public record GetSuccessResponse(List<HashMap<String,String>> data) {
         /**
          * @return this response, serialized as Json
          */
@@ -650,11 +731,17 @@ public class RecommenderHandler implements Route {
         }
     }
 
-    public WeatherReport fromWeatherJson(String jsonList) throws IOException {
-        return this.weatherReportJsonAdapter.fromJson(jsonList);
-    }
-
-    public record WeatherReport(Float temp, Float feelsLike, String descr, String icon, Float rain, Float snow){
+    public record GetFailureResponse() {
+        /**
+         * @return this response, serialized as Json
+         */
+        String serialize() {
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("result", "bad_json_error");
+            result.put("further description", "load weather");
+            Moshi moshi = new Moshi.Builder().build();
+            return moshi.adapter(Map.class).toJson(result);
+        }
     }
 
 }
