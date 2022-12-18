@@ -4,7 +4,6 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 import edu.brown.cs.student.closet.Closet;
 import edu.brown.cs.student.server.UserData;
-import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Route;
