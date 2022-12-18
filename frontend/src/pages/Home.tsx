@@ -111,6 +111,7 @@ export default function Home() {
     const [weatherMap, setWeatherMap] = useState(new Map<string, string>());
     const [weatherLoaded, setWeatherLoaded] = useState(false);
     const [outfitButtonClicked, setOutfitButtonClicked] = useState(false);
+    const [outfit, setOutfit] = useState([]);
     const weatherAvailable: boolean = weatherLoaded || sessionStorage.getItem("weatherLoaded") === "true";
     const chooseCity = (city: string) => {
         setChosenCity(city);
@@ -138,18 +139,34 @@ export default function Home() {
             setWeatherMap(map);
         }
     }
+
+    const fetchOutfit = async() => {
+        let outfitResponse = await fetch("http://localhost:3230/recc")
+        .then(response => response.json()).then(json => {return json})
+        .catch(error => console.log('error', error));
+        if (outfitResponse.result === "success") {
+            setOutfit(outfitResponse.outfit);
+        }
+    }
+
+    const getOutfit = () => {
+        fetchOutfit();
+        setOutfitButtonClicked(true)
+    }
+
+
     return(
         <div>
             <div aria-label="put it on page header" className="Page-header">Put It On!</div>
             <CitySearch onSelect={chooseCity}/>
             <WeatherDisplay city={chosenCity} weather={weatherMap} loaded={weatherLoaded}/>
-            {weatherAvailable &&<Button role="outfit-button" className="outfit-button" onClick={() => setOutfitButtonClicked(true)}>Get Today's Outfit!</Button>}
+            {weatherAvailable &&<Button role="outfit-button" className="outfit-button" onClick={getOutfit}>Get Today's Outfit!</Button>}
             <Button aria-label="button to go to closet page" className="page-button" onClick={() => {navigate("/closet")}}>Go to closet</Button>
             <ClosetStats/>
             <OverlayTrigger trigger="click" placement="bottom" overlay={instructionsPopover}>
                 <Button className="instructions-button" variant="success">Click for Put It On! Instructions</Button>
             </OverlayTrigger>
-            {outfitButtonClicked && <RecommendedOutfit />}
+            {outfitButtonClicked && <RecommendedOutfit outfit={outfit} />}
         </div>
     )
 }
