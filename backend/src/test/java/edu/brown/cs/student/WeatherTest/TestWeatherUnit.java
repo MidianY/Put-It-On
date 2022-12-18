@@ -1,8 +1,9 @@
-package edu.brown.cs.student;
+package edu.brown.cs.student.WeatherTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import edu.brown.cs.student.WeatherTest.MockedWeatherJsons;
 import edu.brown.cs.student.weather.ErrDatasourceResponse;
 import edu.brown.cs.student.weather.Weather;
 import edu.brown.cs.student.weather.WeatherAPIUtilities;

@@ -58,7 +58,7 @@ public class TestWeatherHandlers {
   @Test
   public void testValidWeather() throws IOException, URISyntaxException, InterruptedException {
     String URLString =
-        "http://localhost:" + Spark.port() + "/" + "storeGetWeatherData?city=Portland&state=OR";
+            "http://localhost:" + Spark.port() + "/" + "storeGetWeatherData?city=Portland&state=OR";
 
     // create client
     HttpClient client = HttpClient.newHttpClient();
@@ -68,7 +68,7 @@ public class TestWeatherHandlers {
 
     // get response from endpoint
     HttpResponse<String> weatherResponse =
-        client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
+            client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
     String resp = weatherResponse.body();
 
     Map<String, Object> responseMap = WeatherAPIUtilities.JsonToMap(resp);
@@ -90,7 +90,7 @@ public class TestWeatherHandlers {
 
     // get response from endpoint
     HttpResponse<String> weatherResponse2 =
-        client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
+            client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
     String resp2 = weatherResponse2.body();
     assertEquals(resp, resp2);
   }
@@ -102,7 +102,7 @@ public class TestWeatherHandlers {
   @Test
   public void testInvalidLocation() throws URISyntaxException, IOException, InterruptedException {
     String URLString =
-        "http://localhost:" + Spark.port() + "/" + "getWeatherData?city=Mario123&state=OR";
+            "http://localhost:" + Spark.port() + "/" + "getWeatherData?city=Mario123&state=OR";
 
     // create client
     HttpClient client = HttpClient.newHttpClient();
@@ -112,7 +112,7 @@ public class TestWeatherHandlers {
 
     // get response from endpoint
     HttpResponse<String> weatherResponse =
-        client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
+            client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
     String resp = weatherResponse.body();
     String expectedJson = new ErrDatasourceResponse().serialize();
     assertEquals(expectedJson, resp);
@@ -125,7 +125,7 @@ public class TestWeatherHandlers {
 
     // get response from endpoint
     HttpResponse<String> weatherResponse2 =
-        client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
+            client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
     String resp2 = weatherResponse2.body();
     assertEquals(resp, resp2);
   }
@@ -146,7 +146,7 @@ public class TestWeatherHandlers {
 
     // get response from endpoint
     HttpResponse<String> weatherResponse =
-        client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
+            client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
     String resp = weatherResponse.body();
     String expectedJson = new ErrDatasourceResponse().serialize();
     assertEquals(expectedJson, resp);
@@ -159,7 +159,7 @@ public class TestWeatherHandlers {
 
     // get response from endpoint
     HttpResponse<String> weatherResponse2 =
-        client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
+            client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
     String resp2 = weatherResponse2.body();
     assertEquals(resp, resp2);
   }
