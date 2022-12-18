@@ -1,4 +1,4 @@
-package recommender;
+package edu.brown.cs.recommender;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
