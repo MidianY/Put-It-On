@@ -74,7 +74,7 @@ export default function CitySearch({onSelect}: {onSelect: any}){
     return(
         <div className="location-input">
             <div><strong>Where are you today?</strong></div>
-            <CitiesAutocomplete onSelect={onSelect}/>
+            <CitiesAutocomplete  onSelect={onSelect}/>
         </div>
     )
 }
