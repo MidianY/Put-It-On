@@ -18,7 +18,6 @@ public class Recommender {
     }
 
     /**
-     *
      * @param data instance of UserData class that hold the information for the closet and weather api
      * @return a hashmap with a key value outfit and the given outfit for the weather and what's present in the closet
      * @throws IOException checks to see if the colors and any other strings are properly defined in any objects
@@ -45,7 +44,10 @@ public class Recommender {
             Map<String,List> colorsRanked = rankColors(presentCloset,checkedColor);
             returnProperCloset(presentCloset,colorsRanked);
             validItem(presentCloset,checkedColor,colorsRanked);
-            desiredFit = checkColor(presentCloset);
+            desiredFit = checkColor(presentCloset,validOuterTopNames,validInnerTopNames,validBottomNames,validShoeNames);
+            if(desiredFit.get("outfit").get(0).isEmpty()){
+                desiredFit.get("outfit").remove(0);
+            }
         }
 
         return desiredFit.get("outfit");
@@ -163,7 +165,6 @@ public class Recommender {
     }
 
     /**
-     *
      * @param data instance of UserData class that hold the information for the closet and weather api
      * @param validOuterTopNames takes in the updated valid clothing items and cross-references that with the items in the closet
      * @param validInnerTopNames takes in the updated valid clothing items and cross-references that with the items in the closet
@@ -199,7 +200,7 @@ public class Recommender {
         Closet closetReport = data.getCurrentCloset();
         List<Map<String, String>> closet = closetReport.getClothesData();
 
-        Boolean isEmpty = false;
+        boolean isEmpty = false;
 
         if (closet.isEmpty()){
 
@@ -234,7 +235,7 @@ public class Recommender {
 
             footwear2.put("item", validShoeNames.get(new Random().nextInt(validShoeNames.size())));
             String randomColor3 = getColors().get(new Random().nextInt(getColors().size()));
-            int randomColorIndex3 = getColors().indexOf(randomColor2);
+            int randomColorIndex3 = getColors().indexOf(randomColor3);
             List<HashMap<String, List<String>>> test3 = returnRandomColorMatch(getColors().get(new Random().nextInt(getColors().size())), getValidColors(),getColors());
             test3.get(randomColorIndex3);
             footwear2.put("color", randomColor3);
@@ -250,7 +251,7 @@ public class Recommender {
 
         if(!isEmpty) {
             for (int i = 0; i < availableClothing.size(); i++) {
-                Boolean outerTracker = false;
+                boolean outerTracker = false;
                 for (Map<String, String> item : closet) {
                     if (availableClothing.get(0).size() == 0) {
                         outerTracker = true;
@@ -296,21 +297,33 @@ public class Recommender {
                     if (i == 0 && availableClothing.get(0).size() != 0) {
                         outerTop = new HashMap<>();
                         outerTop.put("item", validOuterTopNames.get(new Random().nextInt(validOuterTopNames.size())));
-                        outerTop.put("color", "black");
+                        String randomColor3 = getColors().get(new Random().nextInt(getColors().size()));
+                        int randomColorIndex3 = getColors().indexOf(randomColor3);
+                        List<HashMap<String, List<String>>> test3 = returnRandomColorMatch(getColors().get(new Random().nextInt(getColors().size())), getValidColors(),getColors());
+                        test3.get(randomColorIndex3);
+                        outerTop.put("color", randomColor3);
                         outerTop.put("inCloset", "false");
                         outerTopList.add(outerTop);
                         checkList(outerTopList);
                     } else if (i == 1) {
                         innerTop = new HashMap<>();
                         innerTop.put("item", validInnerTopNames.get(new Random().nextInt(validInnerTopNames.size())));
-                        innerTop.put("color", getColors().get(new Random().nextInt(getColors().size())));
+                        String randomColor3 = getColors().get(new Random().nextInt(getColors().size()));
+                        int randomColorIndex3 = getColors().indexOf(randomColor3);
+                        List<HashMap<String, List<String>>> test3 = returnRandomColorMatch(getColors().get(new Random().nextInt(getColors().size())), getValidColors(),getColors());
+                        test3.get(randomColorIndex3);
+                        innerTop.put("color", randomColor3);
                         innerTop.put("inCloset", "false");
                         innerTopList.add(innerTop);
                         checkList(innerTopList);
                     } else if (i == 2) {
                         bottom = new HashMap<>();
                         bottom.put("item", validBottomNames.get(new Random().nextInt(validBottomNames.size())));
-                        bottom.put("color", getColors().get(new Random().nextInt(getColors().size())));
+                        String randomColor3 = getColors().get(new Random().nextInt(getColors().size()));
+                        int randomColorIndex3 = getColors().indexOf(randomColor3);
+                        List<HashMap<String, List<String>>> test3 = returnRandomColorMatch(getColors().get(new Random().nextInt(getColors().size())), getValidColors(),getColors());
+                        test3.get(randomColorIndex3);
+                        bottom.put("color", randomColor3);
                         bottom.put("inCloset", "false");
                         bottomList.add(bottom);
                         checkList(bottomList);
@@ -318,9 +331,17 @@ public class Recommender {
                         footwear = new HashMap<>();
                         footwear.put("item", validShoeNames.get(new Random().nextInt(validShoeNames.size())));
                         if (footwear.get("item").equals("sneakers")) {
-                            footwear.put("color", "white");
+                            String randomColor3 = getColors().get(new Random().nextInt(getColors().size()));
+                            int randomColorIndex3 = getColors().indexOf(randomColor3);
+                            List<HashMap<String, List<String>>> test3 = returnRandomColorMatch(getColors().get(new Random().nextInt(getColors().size())), getValidColors(),getColors());
+                            test3.get(randomColorIndex3);
+                            footwear.put("color", randomColor3);
                         } else {
-                            footwear.put("color", "saddlebrown");
+                            String randomColor3 = getColors().get(new Random().nextInt(getColors().size()));
+                            int randomColorIndex3 = getColors().indexOf(randomColor3);
+                            List<HashMap<String, List<String>>> test3 = returnRandomColorMatch(getColors().get(new Random().nextInt(getColors().size())), getValidColors(),getColors());
+                            test3.get(randomColorIndex3);
+                            footwear.put("color", randomColor3);
                         }
                         footwear.put("inCloset", "false");
                         footWearList.add(footwear);
@@ -407,7 +428,9 @@ public class Recommender {
      * we wouldn't to have three pants that fit the weather and color criteria being returned. Uses for loops to iterate
      * through every list of items (ex. {item=boots, inCloset=false, color=saddlebrown}) and checks individual key values
      */
-    public Map<String,ArrayList<Map<String,String>>> checkColor(ArrayList<ArrayList<Map<String,String>>> filteredCloset){
+    public Map<String,ArrayList<Map<String,String>>> checkColor(ArrayList<ArrayList<Map<String,String>>> filteredCloset,
+            ArrayList<String> validOuterTopNames, ArrayList<String> validInnerTopNames, ArrayList<String> validBottomNames,
+            ArrayList<String> validShoeNames){
 
         Map<String,String> outerTop;
 
@@ -431,14 +454,14 @@ public class Recommender {
             for (int j = 0; j < filteredCloset.get(i).size(); j++) {
 
                 if (filteredCloset.size() == 3) {
-                    if (i == 0) {
+                    if (validInnerTopNames.contains(filteredCloset.get(i).get(j).get("item"))) {
                         innerTop = new HashMap<>();
                         innerTop.put("item", filteredCloset.get(i).get(j).get("item"));
                         innerTop.put("color", filteredCloset.get(i).get(j).get("color"));
                         innerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
                         list.add(innerTop);
 
-                    } else if (i == 1) {
+                    } else if (validBottomNames.contains(filteredCloset.get(i).get(j).get("item"))) {
                         bottom = new HashMap<>();
                         bottom.put("item", filteredCloset.get(i).get(j).get("item"));
                         bottom.put("color", filteredCloset.get(i).get(j).get("color"));
@@ -452,31 +475,30 @@ public class Recommender {
                         footwear.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
                         list.add(footwear);
                     }
-
                 } else {
 
-                    if (i == 0) {
+                    if (validOuterTopNames.contains(filteredCloset.get(i).get(j).get("item"))) {
                         outerTop = new HashMap<>();
                         outerTop.put("item", filteredCloset.get(i).get(j).get("item"));
                         outerTop.put("color", filteredCloset.get(i).get(j).get("color"));
                         outerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
                         list.add(outerTop);
 
-                    } else if (i == 1) {
+                    } else if (validInnerTopNames.contains(filteredCloset.get(i).get(j).get("item"))) {
                         innerTop = new HashMap<>();
                         innerTop.put("item", filteredCloset.get(i).get(j).get("item"));
                         innerTop.put("color", filteredCloset.get(i).get(j).get("color"));
                         innerTop.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
                         list.add(innerTop);
 
-                    } else if (i == 2) {
+                    } else if (validBottomNames.contains(filteredCloset.get(i).get(j).get("item"))) {
                         bottom = new HashMap<>();
                         bottom.put("item", filteredCloset.get(i).get(j).get("item"));
                         bottom.put("color", filteredCloset.get(i).get(j).get("color"));
                         bottom.put("inCloset", filteredCloset.get(i).get(j).get("inCloset"));
                         list.add(bottom);
 
-                    } else if (i == 3) {
+                    } else if (validShoeNames.contains(filteredCloset.get(i).get(j).get("item"))) {
                         footwear = new HashMap<>();
                         footwear.put("item", filteredCloset.get(i).get(j).get("item"));
                         footwear.put("color", filteredCloset.get(i).get(j).get("color"));
@@ -487,9 +509,50 @@ public class Recommender {
             }
         }
 
-        outfit.put("outfit", list);
+        outfit.put("outfit", reOrder(list,validOuterTopNames,validInnerTopNames,validBottomNames,validShoeNames));
 
         return outfit;
+    }
+
+    /**
+     * @param list outfit list found in the checkColor method
+     * @param validOuterTopNames list of valid clothing pieces
+     * @param validInnerTopNames list of valid clothing pieces
+     * @param validBottomNames list of valid clothing pieces
+     * @param validShoeNames list of valid clothing pieces
+     * @return would return a list making sure that the output of the list would follow in piece order so that
+     * outer is first (if there are 4 pieces for that weather) followed by inner, bottom, and pants
+     */
+    public ArrayList<Map<String, String>> reOrder(ArrayList<Map<String, String>> list,
+          ArrayList<String> validOuterTopNames, ArrayList<String> validInnerTopNames, ArrayList<String> validBottomNames,
+                                                  ArrayList<String> validShoeNames){
+
+        ArrayList<Map<String, String>> newList = new ArrayList<>();
+        Map<String,String> outerTop = new HashMap<>();
+        Map<String,String> innerTop = new HashMap<>();
+        Map<String,String> bottom = new HashMap<>();
+        Map<String,String> footwear = new HashMap<>();
+        for(Map<String,String> map : list){
+            if(validOuterTopNames.contains(map.get("item"))){
+                outerTop = map;
+            }
+            else if(validInnerTopNames.contains(map.get("item"))){
+                innerTop = map;
+            }
+            else if(validBottomNames.contains(map.get("item"))){
+                bottom = map;
+            }
+            else if(validShoeNames.contains(map.get("item"))){
+                footwear = map;
+            }
+        }
+
+        newList.add(outerTop);
+        newList.add(innerTop);
+        newList.add(bottom);
+        newList.add(footwear);
+
+        return newList;
     }
 
     /**
@@ -791,7 +854,7 @@ public class Recommender {
                 if (orderedColorsPresentInCloset.contains(currentColor)){
                     Set<Integer> sortedSet = new TreeSet<>(Comparator.reverseOrder());
                     sortedSet.addAll(listOfColorValuePairs.get(i));
-                    List<Integer> example = sortedSet.stream().limit(1).toList();
+                    List<Integer> example = sortedSet.stream().limit(4).toList();
                     if(!currentValue.equals(example.get(0))){
                         filteredCloset.get(i).remove(j);
                     }
