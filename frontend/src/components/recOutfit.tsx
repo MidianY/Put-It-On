@@ -7,7 +7,6 @@ import { OverlayTrigger } from "react-bootstrap";
 import { Tooltip } from "react-bootstrap";
 
 export default function RecommendedOutfit({outfit}: {outfit: any[]}) {
-    console.log(outfit)
     return(
         <div className="outfit">
         Recommended Outfit:

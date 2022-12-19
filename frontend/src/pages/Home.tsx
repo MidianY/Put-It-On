@@ -118,6 +118,7 @@ export default function Home() {
         getWeather(city);
         sessionStorage.setItem("weatherLoaded", "true");
         setWeatherLoaded(true);
+        setOutfitButtonClicked(false);
     }
 
     const getWeather = async(city: string) => {
@@ -151,9 +152,8 @@ export default function Home() {
 
     const getOutfit = () => {
         fetchOutfit();
-        setOutfitButtonClicked(true)
+        setOutfitButtonClicked(true);
     }
-
 
     return(
         <div>
