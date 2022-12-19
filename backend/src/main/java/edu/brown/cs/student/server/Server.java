@@ -3,7 +3,6 @@ package edu.brown.cs.student.server;
 import static spark.Spark.after;
 
 import edu.brown.cs.student.handlers.*;
-import edu.brown.cs.student.handlers.RecommenderHandler;
 import spark.Spark;
 
 /**

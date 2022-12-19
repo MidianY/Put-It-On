@@ -1,4 +1,8 @@
-package edu.brown.cs.student.server;
+<<<<<<<< HEAD:backend/src/main/java/edu/brown/cs/student/recommender/Recommender.java
+package edu.brown.cs.student.recommender;
+========
+package edu.brown.cs.recommender;
+>>>>>>>> 5f9aff0e92fc748513d81b4ca1d14442616bda60:backend/src/main/java/edu/brown/cs/recommender/Recommender.java
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
