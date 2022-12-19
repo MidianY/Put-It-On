@@ -62,7 +62,7 @@ public class TestClosetHandlers {
   @Test
   public void testValidCloset() throws IOException, URISyntaxException, InterruptedException {
     String URLString =
-        "http://localhost:" + Spark.port() + "/" + "editCloset?color=red&item=tank&action=add";
+            "http://localhost:" + Spark.port() + "/" + "editCloset?color=red&item=tank&action=add";
 
     // create client
     HttpClient client = HttpClient.newHttpClient();
@@ -72,7 +72,7 @@ public class TestClosetHandlers {
 
     // get response from endpoint
     HttpResponse<String> closetResponse =
-        client.send(closetRequest, HttpResponse.BodyHandlers.ofString());
+            client.send(closetRequest, HttpResponse.BodyHandlers.ofString());
 
     String resp = closetResponse.body();
     Map<String, Object> responseMap = WeatherAPIUtilities.JsonToMap(resp);
@@ -89,7 +89,7 @@ public class TestClosetHandlers {
 
     // get response from endpoint
     HttpResponse<String> closetResponse2 =
-        client.send(closetRequest2, HttpResponse.BodyHandlers.ofString());
+            client.send(closetRequest2, HttpResponse.BodyHandlers.ofString());
 
     String resp2 = closetResponse2.body();
     Map<String, Object> responseMap2 = WeatherAPIUtilities.JsonToMap(resp2);
@@ -115,7 +115,7 @@ public class TestClosetHandlers {
   @Test
   public void testInvalidCloset() throws URISyntaxException, IOException, InterruptedException {
     String URLString =
-        "http://localhost:" + Spark.port() + "/" + "editCloset?color=red&item=tk&action=add";
+            "http://localhost:" + Spark.port() + "/" + "editCloset?color=red&item=tk&action=add";
 
     // create client
     HttpClient client = HttpClient.newHttpClient();
@@ -125,7 +125,7 @@ public class TestClosetHandlers {
 
     // get response from endpoint
     HttpResponse<String> closetResponse =
-        client.send(closetRequest, HttpResponse.BodyHandlers.ofString());
+            client.send(closetRequest, HttpResponse.BodyHandlers.ofString());
 
     String resp = closetResponse.body();
     String expectedJson = new BadClothingError().serialize();
@@ -139,7 +139,7 @@ public class TestClosetHandlers {
 
     // get response from endpoint
     HttpResponse<String> closetResponse2 =
-        client.send(closetRequest2, HttpResponse.BodyHandlers.ofString());
+            client.send(closetRequest2, HttpResponse.BodyHandlers.ofString());
     String resp2 = closetResponse2.body();
     Map<String, Object> responseMap2 = WeatherAPIUtilities.JsonToMap(resp2);
     assertEquals(new ArrayList<>(), responseMap2.get("closet"));
@@ -152,7 +152,7 @@ public class TestClosetHandlers {
   @Test
   public void testInvalidQuery() throws URISyntaxException, IOException, InterruptedException {
     String URLString =
-        "http://localhost:" + Spark.port() + "/" + "editCloset?c=red&iem=tank&actin=add";
+            "http://localhost:" + Spark.port() + "/" + "editCloset?c=red&iem=tank&actin=add";
 
     // create client
     HttpClient client = HttpClient.newHttpClient();
@@ -162,7 +162,7 @@ public class TestClosetHandlers {
 
     // get response from endpoint
     HttpResponse<String> closetResponse =
-        client.send(closetRequest, HttpResponse.BodyHandlers.ofString());
+            client.send(closetRequest, HttpResponse.BodyHandlers.ofString());
 
     String resp = closetResponse.body();
     String expectedJson = new BadRequestError().serialize();
@@ -176,7 +176,7 @@ public class TestClosetHandlers {
 
     // get response from endpoint
     HttpResponse<String> closetResponse2 =
-        client.send(closetRequest2, HttpResponse.BodyHandlers.ofString());
+            client.send(closetRequest2, HttpResponse.BodyHandlers.ofString());
     String resp2 = closetResponse2.body();
     Map<String, Object> responseMap2 = WeatherAPIUtilities.JsonToMap(resp2);
     assertEquals(new ArrayList<>(), responseMap2.get("closet"));

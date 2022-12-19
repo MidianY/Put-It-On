@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.brown.cs.student.handlers.GetWeatherHandler;
 import edu.brown.cs.student.handlers.StoreGetWeatherHandler;
+import edu.brown.cs.student.recommender.RecommenderUtilities;
 import edu.brown.cs.student.server.UserData;
 import edu.brown.cs.student.weather.ErrDatasourceResponse;
 import edu.brown.cs.student.weather.WeatherAPIUtilities;
@@ -54,7 +55,9 @@ public class TestWeatherHandlers {
     Spark.awaitStop(); // don't proceed until the server is stopped
   }
 
-  /** Tests that valid query returns expected map with all relevant weather data components */
+  /**
+   * Tests that valid query returns expected map with all relevant weather data components
+   */
   @Test
   public void testValidWeather() throws IOException, URISyntaxException, InterruptedException {
     String URLString =
@@ -100,7 +103,7 @@ public class TestWeatherHandlers {
    * for some reason
    */
   @Test
-  public void testInvalidLocation() throws URISyntaxException, IOException, InterruptedException {
+  public void testRecommender() throws URISyntaxException, IOException, InterruptedException {
     String URLString =
             "http://localhost:" + Spark.port() + "/" + "getWeatherData?city=Mario123&state=OR";
 
@@ -128,39 +131,40 @@ public class TestWeatherHandlers {
             client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
     String resp2 = weatherResponse2.body();
     assertEquals(resp, resp2);
-  }
 
-  /**
-   * Tests for when the request itself is invalid, verifying correct warning responses are returned
-   * accordingly
-   */
-  @Test
-  public void testInvalidQuery() throws URISyntaxException, IOException, InterruptedException {
-    String URLString = "http://localhost:" + Spark.port() + "/" + "getWeatherData?city=";
+    String URLString6 = "http://localhost:" + Spark.port() + "/" + "editCloset?color=red&item=tank&action=add";
 
     // create client
-    HttpClient client = HttpClient.newHttpClient();
+    HttpClient client6 = HttpClient.newHttpClient();
 
     // create request
-    HttpRequest weatherRequest = HttpRequest.newBuilder().uri(new URI(URLString)).GET().build();
+    HttpRequest closetRequest = HttpRequest.newBuilder().uri(new URI(URLString6)).GET().build();
 
     // get response from endpoint
-    HttpResponse<String> weatherResponse =
-            client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
-    String resp = weatherResponse.body();
-    String expectedJson = new ErrDatasourceResponse().serialize();
-    assertEquals(expectedJson, resp);
+    HttpResponse<String> closetResponse =
+            client6.send(closetRequest, HttpResponse.BodyHandlers.ofString());
 
-    // verify that user database isn't updated
-    String URLString2 = "http://localhost:" + Spark.port() + "/" + "getWeatherData";
+    String resp6 = closetResponse.body();
+    Map<String, Object> responseMap6 = WeatherAPIUtilities.JsonToMap(resp6);
+    assertEquals("success", responseMap6.get("result"));
+    assertEquals("red", responseMap6.get("color"));
+    assertEquals("add", responseMap6.get("action"));
+    assertEquals("tank", responseMap6.get("item"));
+
+    // verify  data was stored into user database
+    String URLString7 = "http://localhost:" + Spark.port() + "/" + "getCloset";
 
     // create request
-    HttpRequest weatherRequest2 = HttpRequest.newBuilder().uri(new URI(URLString2)).GET().build();
+    HttpRequest closetRequest7 = HttpRequest.newBuilder().uri(new URI(URLString7)).GET().build();
 
     // get response from endpoint
-    HttpResponse<String> weatherResponse2 =
-            client.send(weatherRequest2, HttpResponse.BodyHandlers.ofString());
-    String resp2 = weatherResponse2.body();
-    assertEquals(resp, resp2);
+    HttpResponse<String> closetResponse7 =
+            client.send(closetRequest7, HttpResponse.BodyHandlers.ofString());
+
+    String resp7 = closetResponse7.body();
+    Map<String, Object> responseMap7 = RecommenderUtilities.JsonToMap(resp7);
+
+    assertEquals("success", responseMap7.get("result"));
+    assertEquals(4, responseMap7.size());
   }
 }
