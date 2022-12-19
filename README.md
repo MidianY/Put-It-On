@@ -58,4 +58,7 @@ To fetch weather data, we utilized the OpenWeatherAPI to fetch current weather d
 
 For frontend design and icons, we used React Bootstrap, React Icons, and Adobe Stock.
 
+## How to...
+To use our web app, open our backend contents and run the Server.java file. Then, access the frontend directory in the terminal and type `npm start` to run the React frontend. From here, a tab with the address localhost:3000 should open. If not, type that address into the search bar. To use the app, enter the city you are in into the search bar. Then, add clothing you own to your closet. Finally, get a recommended outfit based on the weather in your city and the clothes in your closet.
+
 
