@@ -1,7 +1,7 @@
 package edu.brown.cs.student.handlers;
 
 import com.squareup.moshi.Moshi;
-import edu.brown.cs.student.server.Recommender;
+import edu.brown.cs.student.recommender.Recommender;
 import edu.brown.cs.student.server.UserData;
 import spark.Request;
 import spark.Response;
