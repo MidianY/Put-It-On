@@ -54,6 +54,6 @@ The next high-level component, `Closet`, is centered around the `ClothingOptions
 
 # Contributors 
 
-- To fetch weather data, we utilized the OpenWeatherAPI to fetch current weather data within the Weather class. Rather than using all of the different types of weather data that this API records, we focused on the following key categories we thought were most relevant for our purposes: snow level, rain level, temperature, feels like temperature, city name, state name, icon, and the weather description tag. Although OpenWeatherAPI can process data for cities outside the United States, we focused only on American cities for the purposes of this project. 
+To fetch weather data, we utilized the OpenWeatherAPI to fetch current weather data within the Weather class. Rather than using all of the different types of weather data that this API records, we focused on the following key categories we thought were most relevant for our purposes: snow level, rain level, temperature, feels like temperature, city name, state name, icon, and the weather description tag. Although OpenWeatherAPI can process data for cities outside the United States, we focused only on American cities for the purposes of this project. 
 
 
