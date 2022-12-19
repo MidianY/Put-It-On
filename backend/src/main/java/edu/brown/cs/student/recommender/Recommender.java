@@ -64,7 +64,7 @@ public class Recommender {
         String weatherReport = data.getLocationData();
         WeatherReport forecast = this.fromWeatherJson(weatherReport);
 
-        if (forecast.rain() >= 2 || forecast.snow() > 0) {
+        if (forecast.rain() >= 2 || forecast.snow() > 1) {
             return true;
         }
         else {
@@ -90,7 +90,7 @@ public class Recommender {
         WeatherReport forecast = this.fromWeatherJson(weatherReport);
         List<List<String>> pieces = new ArrayList<>();
 
-        if (forecast.feelsLike() >= 70) {
+        if (forecast.feelsLike() >= 70.0) {
             if(precipitationCheck(data)){
                 validOuterTopNames.remove("coat");
                 validShoeNames.remove("sneakers");
@@ -104,7 +104,7 @@ public class Recommender {
                 validInnerTopNames.remove("sweatshirt");
                 validShoeNames.remove("boots");
             }
-        } else if (forecast.feelsLike() >= 60 && forecast.feelsLike() < 70) {
+        } else if (forecast.feelsLike() >= 60.0 && forecast.feelsLike() < 70.0) {
             if(precipitationCheck(data)){
                 validOuterTopNames.remove("coat");
                 validShoeNames.remove("sneakers");
@@ -116,7 +116,7 @@ public class Recommender {
                 validOuterTopNames.remove("coat");
                 validShoeNames.remove("boots");
             }
-        } else if (forecast.feelsLike() >= 40 && forecast.feelsLike() < 60) {
+        } else if (forecast.feelsLike() >= 40.0 && forecast.feelsLike() < 60.0) {
             if(precipitationCheck(data)){
                 validInnerTopNames.remove("tank");
                 validInnerTopNames.remove("short-sleeve");
@@ -130,7 +130,7 @@ public class Recommender {
                 validBottomNames.remove("skirt");
                 validShoeNames.remove("boots");
             }
-        } else if (forecast.feelsLike() >= 33 && forecast.feelsLike() < 40) {
+        } else if (forecast.feelsLike() >= 30.0 && forecast.feelsLike() < 40.0) {
             if(precipitationCheck(data)){
                 validOuterTopNames.remove("hoodie");
                 validInnerTopNames.remove("tank");
@@ -145,6 +145,7 @@ public class Recommender {
                 validInnerTopNames.remove("short-sleeve");
                 validBottomNames.remove("shorts");
                 validBottomNames.remove("skirt");
+                validShoeNames.remove("boots");
             }
         } else {
             validOuterTopNames.remove("hoodie");
