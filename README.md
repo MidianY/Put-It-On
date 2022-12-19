@@ -3,6 +3,7 @@
 2. Backend
 3. Frontend 
 4. Contributors 
+5. How to
 
 ## Project Details
 Project name: Put it On!
