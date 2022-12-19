@@ -5,7 +5,7 @@ Project name: Put it On!
 
 Project Description: A web application that saves users the hassle of deciding what to wear by recommending matching, weather-appropriate outfits based on their closet. 
 
-Team members and contributions: Adam Remels (aremels), Jarra Omar (jomar), Midian Yoseph (myoseph), Musa Tahir (mtahir1), 
+Team members and contributions: Adam Remels (aremels), Jarra Omar (jomar), Midian Yoseph (myoseph), Musa Tahir (mtahir1) 
 
 Time Spent: 4 weeks
 
